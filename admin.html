@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sewar Admin | AI Nexus Core v4 (Final)</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    
+    <style>
+        /* --- CSS STYLES START --- */
+        :root { 
+            --bg: #02040a; 
+            --card-bg: rgba(13, 17, 23, 0.9);
+            --text-main: #e6edf3;
+            --cyan: #00f3ff;
+            --purple: #bc13fe; 
+            --danger: #ff0055; 
+            --success: #00ff9d; 
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        * { box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+        body { margin: 0; background: var(--bg); color: var(--text-main); overflow-x: hidden; background-image: radial-gradient(circle at 50% 50%, #0a101f 0%, #000000 100%); }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
+
+        /* UTILS */
+        .glass-panel {
+            background: var(--card-bg);
+            border: var(--glass-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .text-cyan { color: var(--cyan); text-shadow: 0 0 5px var(--cyan); }
+        .text-purple { color: var(--purple); text-shadow: 0 0 5px var(--purple); }
+
+        /* LOGIN SCREEN */
+        #loginScreen { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: black; z-index:999; display:flex; flex-direction:column; 
+            align-items:center; justify-content:center;
+        }
+        .cyber-input {
+            background: rgba(0,0,0,0.5); border: 1px solid #444; color: white;
+            padding: 10px; width: 100%; outline: none; border-radius: 4px;
+            transition: 0.3s; font-family: 'Share Tech Mono';
+        }
+        .cyber-input:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0, 243, 255, 0.2); }
+        
+        .btn { padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; transition: 0.3s; text-transform: uppercase; }
+        .btn-primary { background: var(--cyan); color: black; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(0, 243, 255, 0.5); }
+
+        /* DASHBOARD GRID */
+        .dashboard { display: grid; grid-template-columns: 260px 1fr; height: 100vh; display:none; }
+        
+        /* SIDEBAR */
+        .sidebar { background: rgba(5, 5, 10, 0.95); border-right: 1px solid #333; display: flex; flex-direction: column; padding: 20px; }
+        .nav-btn { background: transparent; border: none; color: #8b949e; text-align: left; padding: 15px; font-size: 1.1rem; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover, .nav-btn.active { background: rgba(188, 19, 254, 0.15); color: white; border-left: 4px solid var(--purple); }
+
+        /* CONTENT AREA */
+        .main-content { padding: 30px; overflow-y: auto; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { padding: 20px; position: relative; overflow: hidden; }
+        .stat-val { font-size: 2.5rem; font-weight: 700; font-family: 'Share Tech Mono'; }
+
+        /* TABLES */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; padding: 15px; background: rgba(255,255,255,0.05); color: var(--cyan); }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        /* TERMINAL */
+        .ai-terminal {
+            position: fixed; bottom: 20px; right: 20px; width: 320px; height: 160px;
+            background: rgba(0,0,0,0.9); border: 1px solid var(--success);
+            padding: 10px; font-family: 'Share Tech Mono'; font-size: 0.8rem;
+            color: var(--success); overflow-y: auto; z-index: 100;
+            border-left: 5px solid var(--success);
+            pointer-events: none;
+        }
+
+        @media(max-width: 768px) { .dashboard { grid-template-columns: 1fr; } .sidebar { display:none; } .ai-terminal { display:none; } }
+        /* --- CSS END --- */
+    </style>
+</head>
+<body>
+
+    <div id="loginScreen">
+        <i class="fas fa-fingerprint" style="font-size: 80px; color: var(--purple); margin-bottom: 20px;"></i>
+        <h2 class="text-cyan" style="font-family: 'Share Tech Mono'; letter-spacing: 3px;">SYSTEM LOCKED</h2>
+        <input type="password" id="adminPass" class="cyber-input" style="width: 200px; text-align: center; font-size: 1.2rem;" placeholder="ENTER PIN">
+        <button onclick="checkLogin()" class="btn btn-primary" style="margin-top:20px;">UNLOCK CORE</button>
+        <p id="loginMsg" style="color:var(--danger); display:none; margin-top:10px;">ACCESS DENIED</p>
+    </div>
+
+    <div class="dashboard" id="mainDash">
+        <aside class="sidebar">
+            <div class="logo text-cyan" style="text-align:center; font-size:1.5rem; margin-bottom:30px;">
+                <i class="fas fa-atom"></i> SEWAR<br>
+                <span style="font-size:0.8rem; color:var(--purple)">ADMIN CORE</span>
+            </div>
+            
+            <button class="nav-btn active" onclick="showSection('overview')">
+                <i class="fas fa-satellite"></i> Overview
+            </button>
+            <button class="nav-btn" onclick="showSection('products')">
+                <i class="fas fa-boxes"></i> Inventory
+            </button>
+            <button class="nav-btn" onclick="showSection('users')">
+                <i class="fas fa-users-cog"></i> User Spy Net
+            </button>
+        </aside>
+
+        <main class="main-content">
+            <div id="overview">
+                <h2 class="text-cyan">LIVE TELEMETRY</h2>
+                <div class="stats-grid">
+                    <div class="glass-panel stat-card">
+                        <div style="color:#888; font-size:0.9rem;">DAILY HITS</div>
+                        <div class="stat-val text-cyan" id="visitCount">--</div>
+                    </div>
+                    <div class="glass-panel stat-card">
+                        <div style="color:#888; font-size:0.9rem;">ACTIVE ASSETS</div>
+                        <div class="stat-val text-purple" id="assetCount">--</div>
+                    </div>
+                </div>
+                <div class="glass-panel" style="padding:20px; height:300px;">
+                     <canvas id="myChart"></canvas>
+                </div>
+            </div>
+
+            <div id="products" style="display:none;">
+                <h2 class="text-cyan">ADD NEW ASSET</h2>
+                <div class="glass-panel" style="padding: 20px; margin-bottom: 25px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                        <input type="text" id="newName" placeholder="Item Name (e.g. Iron)" class="cyber-input">
+                        <input type="number" id="newPrice" placeholder="Price (e.g. 30)" class="cyber-input">
+                        <select id="newTrend" class="cyber-input">
+                            <option value="stable">Stable</option>
+                            <option value="up">Bullish 📈</option>
+                            <option value="down">Bearish 📉</option>
+                        </select>
+                        <select id="newUnit" class="cyber-input">
+                            <option value="kg">Per Kg</option>
+                            <option value="pc">Per Pc</option>
+                        </select>
+                    </div>
+                    <button onclick="addNewProduct()" class="btn btn-primary" style="width:100%; margin-top:15px;">INJECT TO DATABASE</button>
+                </div>
+
+                <div class="glass-panel table-container">
+                    <table id="adminTable">
+                        <thead>
+                            <tr><th>NAME</th><th>RATE (₹)</th><th>TREND</th><th>ACTION</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="users" style="display:none;">
+                <h2 class="text-purple">REALTIME USER TRACKER</h2>
+                <div class="glass-panel table-container" style="padding:10px;">
+                    <table id="userTable">
+                        <thead><tr><th>IP / LOCATION</th><th>DEVICE</th><th>TRUST</th><th>ACTION</th></tr></thead>
+                        <tbody id="userTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <div class="ai-terminal" id="aiTerminal">
+            > SYSTEM INITIALIZING...<br>
+        </div>
+    </div>
+
+    <script>
+        // 🔴🔴🔴 PASTE YOUR FIREBASE KEYS BELOW 🔴🔴🔴
+        const firebaseConfig = {
+  apiKey: "AIzaSyC-nreyuj5Qj1sdOMBh1D5Q8n1t090Yo04",
+  authDomain: "smartkabadi-945b9.firebaseapp.com",
+  projectId: "smartkabadi-945b9",
+  storageBucket: "smartkabadi-945b9.firebasestorage.app",
+  messagingSenderId: "92850793972",
+  appId: "1:92850793972:web:50f1cfce0e8d74c2f1dda1",
+  measurementId: "G-K8X0E3MGBB"
+};
+        // 🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴🔴
+
+        // --- GLOBAL VARIABLES ---
+        let db;
+
+        // --- INITIALIZE FIREBASE ---
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            logToTerminal("FIREBASE CONNECTED ✅", "#00ff9d");
+        } catch (error) {
+            logToTerminal("⚠️ FIREBASE ERROR: API KEY CHECK KARO", "red");
+            console.error(error);
+        }
+
+        // --- LOGIN FUNCTION ---
+        function checkLogin() {
+            const pin = document.getElementById('adminPass').value;
+            if(pin === "1234") { 
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainDash').style.display = 'grid';
+                logToTerminal("ACCESS GRANTED: ADMIN", "#00f3ff");
+                
+                // Initialize Data & Chart
+                loadData();
+                initChart();
+            } else {
+                document.getElementById('loginMsg').style.display = 'block';
+                logToTerminal("INTRUDER ALERT!", "red");
+            }
+        }
+
+        // --- NAVIGATION FUNCTION ---
+        function showSection(id) {
+            document.getElementById('overview').style.display = 'none';
+            document.getElementById('products').style.display = 'none';
+            document.getElementById('users').style.display = 'none';
+            document.getElementById(id).style.display = 'block';
+            
+            // Button Highlight
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- LOAD DATA (REALTIME) ---
+        function loadData() {
+            if(!db) return;
+
+            // 1. Load Inventory (Rates)
+            db.collection("rates").onSnapshot((snapshot) => {
+                const tbody = document.querySelector('#adminTable tbody');
+                tbody.innerHTML = '';
+                let count = 0;
+                
+                snapshot.forEach((doc) => {
+                    const item = doc.data();
+                    count++;
+                    const row = `
+                        <tr>
+                            <td style="color:white; font-weight:bold;">${item.name}</td>
+                            <td><input type="number" value="${item.price}" onchange="updatePrice('${doc.id}', this.value)" class="cyber-input" style="width:80px;"></td>
+                            <td>${item.trend}</td>
+                            <td><button onclick="deleteItem('${doc.id}')" class="btn" style="color:var(--danger); padding:5px;">DEL</button></td>
+                        </tr>`;
+                    tbody.innerHTML += row;
+                });
+                document.getElementById('assetCount').innerText = count;
+                logToTerminal("INVENTORY SYNCED", "#bc13fe");
+            });
+
+            // 2. Load Users (Spy Net)
+            db.collection("active_users").orderBy("timestamp", "desc").limit(20).onSnapshot((snapshot) => {
+                const tbody = document.getElementById('userTableBody');
+                tbody.innerHTML = '';
+                let visitCount = 0;
+
+                snapshot.forEach((doc) => {
+                    const u = doc.data();
+                    visitCount++;
+                    let color = u.trustScore > 80 ? '#00ff9d' : '#ff0055';
+                    const row = `
+                        <tr style="animation: fadeIn 0.5s;">
+                            <td><b style="color:white;">${u.ip}</b><br><span style="font-size:0.8rem; color:#888;">${u.city}</span></td>
+                            <td style="color:#aaa;">${u.device}</td>
+                            <td style="color:${color}">${u.trustScore}%</td>
+                            <td><button onclick="deleteUser('${doc.id}')" class="btn" style="padding:5px; font-size:0.8rem; border:1px solid #444;">CLEAR</button></td>
+                        </tr>`;
+                    tbody.innerHTML += row;
+                });
+                document.getElementById('visitCount').innerText = visitCount;
+                logToTerminal("USER NODES DETECTED: " + visitCount, "#00f3ff");
+            });
+        }
+
+        // --- CRUD ACTIONS ---
+
+        // Add Product
+        function addNewProduct() {
+            const name = document.getElementById('newName').value;
+            const price = Number(document.getElementById('newPrice').value);
+            const trend = document.getElementById('newTrend').value;
+            const unit = document.getElementById('newUnit').value;
+
+            if(!name || !price) { alert("Naam aur Price daalo!"); return; }
+
+            db.collection("rates").add({
+                name: name, price: price, trend: trend, unit: unit
+            }).then(() => {
+                logToTerminal("NEW ASSET ADDED: " + name, "#00ff9d");
+                document.getElementById('newName').value = "";
+                document.getElementById('newPrice').value = "";
+            }).catch((e) => logToTerminal("ERROR: " + e.message, "red"));
+        }
+
+        // Update Price
+        function updatePrice(id, newPrice) {
+            db.collection("rates").doc(id).update({ price: Number(newPrice) });
+            logToTerminal("PRICE UPDATED", "yellow");
+        }
+
+        // Delete Item
+        function deleteItem(id) {
+            if(confirm("Delete this asset?")) {
+                db.collection("rates").doc(id).delete();
+                logToTerminal("ITEM DELETED", "red");
+            }
+        }
+
+        // Delete User Log
+        function deleteUser(id) {
+            db.collection("active_users").doc(id).delete();
+        }
+
+        // --- UTILS ---
+        function logToTerminal(msg, color) {
+            const term = document.getElementById('aiTerminal');
+            term.innerHTML += `> <span style="color:${color}">${msg}</span><br>`;
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['10am', '11am', '12pm', '1pm', '2pm', '3pm'],
+                    datasets: [{
+                        label: 'Network Load',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderColor: '#00f3ff',
+                        borderWidth: 2,
+                        fill: false
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    </script>
+</body>
+</html>
