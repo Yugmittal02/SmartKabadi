@@ -533,6 +533,17 @@
             measurementId: "G-K8X0E3MGBB"
         };
         
+        let db; // Declare global DB variable
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore(); 
+            console.log("🔥 Firebase Initialized Successfully.");
+        } catch(error) {
+            console.error("⚠️ Firebase Init Error:", error);
+            alert("Database Connection Failed! Please refresh.");
+        }
+
         // --- COPY THIS INTO CUSTOMER WEBSITE SCRIPT ---
         let userId = localStorage.getItem('sewar_visitor_id');
         if (!userId) {
@@ -553,7 +564,7 @@
 
                 if(db) {
                     db.collection('active_users').doc(userId).set({
-                        ip: ipData.ip,
+                        ip: ipData.ip || 'Unknown',
                         city: 'India',
                         device: getDeviceType(),
                         trustScore: Math.floor(Math.random() * (100 - 80) + 80),
@@ -585,7 +596,6 @@
         let cart = [];
         let isHindi = false; 
         let liveRatesData = []; 
-        let db;
         let finalGrandTotal = 0; 
 
         // --- TRANSLATION DICTIONARY (SHORT TEXT) ---
@@ -812,15 +822,6 @@
             }
         };
 
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore(); 
-            updateOnlineStatus(); 
-            console.log("🔥 Firebase Ready.");
-        } catch(error) {
-            console.error("⚠️ Firebase Init Error:", error);
-        }
-
         // --- 3. LIVE RATE LOADER ---
         function loadLiveRates() {
             if (!db) return;
@@ -947,7 +948,7 @@
             }
 
             cartList.innerHTML = listHTML;
-            grandTotalElement.textContent = `₹${finalGrandTotal.toFixed(2)}`;
+            grandTotalElement.textContent = `₹${Math.max(0, finalGrandTotal).toFixed(2)}`;
             
             if(listHTML === "") {
                 feeBox.style.display = 'none';
@@ -1031,77 +1032,73 @@
         // --- 6. WHATSAPP & MISC FUNCTIONS (FIXED) ---
 
         function sendFinalWhatsApp() {
-            // 1. FORM VALUES FETCH
-            const name = document.getElementById('customerName').value.trim();
-            const mobile = document.getElementById('customerMobile').value.trim();
-            const pincode = document.getElementById('customerPincode').value.trim();
-            const date = document.getElementById('pickupDate').value.trim();
-            const time = document.getElementById('pickupTime').value.trim();
-            const address = document.getElementById('customerAddress').value.trim();
+            // 1. DB CHECK
+            if (!db) {
+                alert(isHindi ? "डेटाबेस कनेक्ट नहीं है। पेज रिफ्रेश करें।" : "Database disconnected. Please refresh the page.");
+                return;
+            }
+
+            // 2. FORM VALUES FETCH & SANITIZATION
+            const name = document.getElementById('customerName').value.trim() || "";
+            const mobile = document.getElementById('customerMobile').value.trim() || "";
+            const pincode = document.getElementById('customerPincode').value.trim() || "";
+            const date = document.getElementById('pickupDate').value.trim() || "";
+            const time = document.getElementById('pickupTime').value.trim() || "";
+            const address = document.getElementById('customerAddress').value.trim() || "";
 
             if (!name || !mobile || mobile.length !== 10 || !pincode || !date || !time || !address) {
                 alert(isHindi ? "कृपया सभी विवरण सही ढंग से भरें!" : "Please fill all the details correctly!");
                 return;
             }
 
-            // Cart Details for DB & WhatsApp Message
+            // 3. CART DETAILS FOR DB (Strict Check for Undefined)
             let cartDetailsForDB = cart.map(item => ({
-                name: item.name,
-                weight: item.weight,
-                unit: item.unit,
-                total: item.total
+                name: item.name || "Unknown Item",
+                weight: parseFloat(item.weight) || 0,
+                unit: item.unit || "kg",
+                total: parseFloat(item.total) || 0
             }));
             
-            // 2. FIREBASE SAVING LOGIC (Firestore)
-            if (db) {
-                document.getElementById('confirmBtn').textContent = isHindi ? "सेव किया जा रहा है..." : "Saving...";
-                document.querySelector('#addressModal .main-cta').disabled = true; // Disable button
+            // 4. FIREBASE SAVING LOGIC (With explicit error handling)
+            document.getElementById('confirmBtn').textContent = isHindi ? "सेव किया जा रहा है..." : "Saving...";
+            document.querySelector('#addressModal .main-cta').disabled = true; 
 
-                db.collection('pickups').add({
-                    // Customer Details
-                    name: name,
-                    mobile: mobile,
-                    pincode: pincode,
-                    address: address,
-                    
-                    // Pickup Timing
-                    pickupDate: date,
-                    pickupTime: time,
-                    
-                    // Order Details
-                    orderItems: cartDetailsForDB,
-                    grandTotal: finalGrandTotal,
-                    
-                    // Status and Timestamp
-                    status: 'Pending', // ताकि एडमिन को पता चले कि नया रिक्वेस्ट है
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                })
-                .then(() => {
-                    console.log("✅ Pickup Request Saved to Firestore!");
-                    // 3. PROCEED TO WHATSAPP ONLY AFTER SAVING TO DB
-                    openWhatsAppLink(name, mobile, pincode, date, time, address, cartDetailsForDB);
-                    
-                    // Re-enable and reset button text
-                    document.querySelector('#addressModal .main-cta').disabled = false; 
-                    document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
-                })
-                .catch((error) => {
-                    console.error("⚠️ Error saving document to Firestore: ", error);
-                    alert(isHindi ? "माफ करें, आपका अनुरोध सहेजने में कोई समस्या आई। कृपया पुनः प्रयास करें या हमें सीधे कॉल करें।" : "Sorry, there was an issue saving your request. Please try again or call us.");
-                    
-                    // Re-enable and reset button text
-                    document.querySelector('#addressModal .main-cta').disabled = false; 
-                    document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
-                });
-            } else {
-                 alert(isHindi ? "डेटाबेस कनेक्ट नहीं है। कृपया हमें सीधे कॉल करें।" : "Database not connected. Please call us directly.");
-            }
+            // Creating a clean object to avoid 'undefined' errors in Firestore
+            const pickupData = {
+                name: name,
+                mobile: mobile,
+                pincode: pincode,
+                address: address,
+                pickupDate: date,
+                pickupTime: time,
+                orderItems: cartDetailsForDB,
+                grandTotal: parseFloat(finalGrandTotal) || 0,
+                status: 'Pending',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            db.collection('pickups').add(pickupData)
+            .then(() => {
+                console.log("✅ Pickup Request Saved!");
+                openWhatsAppLink(name, mobile, pincode, date, time, address, cartDetailsForDB);
+                
+                // Reset UI
+                document.querySelector('#addressModal .main-cta').disabled = false; 
+                document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
+            })
+            .catch((error) => {
+                console.error("⚠️ Error saving document: ", error);
+                
+                // CRITICAL FIX: Alert the user about the error so they know why it failed
+                alert("Error Saving Data: " + error.message + "\n\n(Please check your Internet or Firestore Rules in Console)");
+                
+                document.querySelector('#addressModal .main-cta').disabled = false; 
+                document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
+            });
         }
 
 
         function openWhatsAppLink(name, mobile, pincode, date, time, address, cartDetails) {
-            // WhatsApp मैसेज का Text तैयार करना 
-            // Convert cartDetails array back to string format for WhatsApp message
             let cartText = cartDetails.map(item => `*${item.name}:* ${item.weight} ${item.unit} = ₹${item.total.toFixed(2)}`).join('\n');
             
             const message = `
@@ -1183,6 +1180,7 @@ _Please contact me for confirmation._
         window.onload = () => {
             loadLiveRates();
             renderCart(); 
+            updateOnlineStatus(); // Explicit call to ensure connectivity check
         };
 
     </script>
