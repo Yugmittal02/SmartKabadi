@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartKabadi Service | AI Powered - Final Build</title>
+    <title>SmartKabadi Service | AI Powered - Premium Build</title>
     
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
@@ -15,33 +15,37 @@
     <style>
         /* --- CSS STYLES START --- */
         :root {
-            /* RESTORED ORIGINAL COLORS */
-            --primary: #1b5e20;
-            --secondary: #4caf50;
-            --accent: #ffd700;
-            --alert: #ff4444;
-            --dark: #121212;
-            --light: #f9f9f9;
-            --ai-color: #00ffcc;
+            /* NEW PALETTE */
+            --primary: #00bf63;       /* Emerald Green - Main Action */
+            --primary-hover: #009e52; 
+            --bg-dark: #0f172a;       /* Slate 900 - Background */
+            --accent: #ffb703;        /* Golden Yellow - Highlights */
+            --glass: rgba(255, 255, 255, 0.92); /* Glass Effect */
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            --text-main: #0f172a;     /* Dark Text for inside Glass */
+            --text-light: #f8fafc;    /* Light Text for Dark Background */
+            --alert: #ef4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
         
         body { 
-            background-color: #f0f2f5; 
-            color: var(--dark); 
+            background-color: var(--bg-dark); 
+            color: var(--text-light); 
             overflow-x: hidden; 
             transition: all 0.3s ease; 
             padding-bottom: 0px; 
         }
 
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        @keyframes pulse-gold { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
+        @keyframes glow { 0% { box-shadow: 0 0 5px var(--primary); } 50% { box-shadow: 0 0 20px var(--primary); } 100% { box-shadow: 0 0 5px var(--primary); } }
 
-        /* --- NAVBAR & LOGO (Structure kept, Colors restored) --- */
+        /* --- NAVBAR (Updated to Slate 900 + Emerald) --- */
         .navbar {
-            background: var(--primary); /* Restored to Green */
-            padding: 12px 15px;
+            background: rgba(15, 23, 42, 0.95); /* Slate 900 with slight transparency */
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between; 
             align-items: center;
@@ -49,19 +53,20 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         
-        /* New Logo Structure Adapted to Original Colors */
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             cursor: pointer;
         }
         .logo-icon-img {
-            font-size: 2rem;
-            color: var(--accent); /* Changed to Gold to match theme */
+            font-size: 2.2rem;
+            color: var(--primary); /* Emerald Green Logo */
+            filter: drop-shadow(0 0 5px rgba(0, 191, 99, 0.5));
         }
         .logo-text-group {
             display: flex;
@@ -69,173 +74,244 @@
             line-height: 1;
         }
         .logo-main-text {
-            font-weight: 700;
-            font-size: 1.2rem;
+            font-weight: 800;
+            font-size: 1.3rem;
             color: white;
             letter-spacing: 0.5px;
         }
         .logo-sub-text {
-            font-weight: 400;
-            font-size: 0.85rem;
-            color: var(--accent); /* Changed to Gold */
-            align-self: flex-end; 
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: var(--primary); /* Emerald Subtext */
+            align-self: flex-start; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        .nav-actions { display: flex; gap: 8px; align-items: center; justify-content: flex-end; }
+        .nav-actions { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
         
         .lang-btn {
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
-            color: white; padding: 6px 10px; border-radius: 15px; font-size: 0.75rem;
-            cursor: pointer; transition: 0.3s; white-space: nowrap;
+            background: transparent; 
+            border: 1px solid var(--primary);
+            color: var(--primary); 
+            padding: 7px 15px; 
+            border-radius: 50px; 
+            font-size: 0.8rem;
+            cursor: pointer; 
+            transition: 0.3s; 
+            font-weight: 600;
         }
-        /* Restored original hover */
-        .lang-btn:hover { background: var(--accent); color: var(--dark); border-color: var(--accent); }
+        .lang-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 10px var(--primary); }
 
         .call-btn { 
-            background: var(--accent); color: var(--dark); padding: 6px 12px; 
-            border-radius: 20px; text-decoration: none; font-weight: 700; 
-            font-size: 0.85rem; cursor: pointer; white-space: nowrap;
-            display: flex; align-items: center; gap: 5px;
+            background: var(--primary); 
+            color: white; 
+            padding: 8px 18px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            white-space: nowrap;
+            display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 191, 99, 0.3);
+            transition: transform 0.2s;
         }
+        .call-btn:hover { transform: translateY(-2px); background: var(--primary-hover); }
 
-        /* 🚀 Ticker Gap Fix and Wrap Update */
+        /* --- TICKER (Golden Yellow) --- */
         .ticker-wrap { 
-            background: var(--dark); color: var(--accent); overflow: hidden; 
-            white-space: nowrap; padding: 8px 0; font-size: 0.9rem; 
-            border-bottom: 2px solid var(--accent);
+            background: #000; /* Pure Black for contrast */
+            color: var(--accent); /* Golden Yellow Text */
+            overflow: hidden; 
+            white-space: nowrap; 
+            padding: 10px 0; 
+            font-size: 0.95rem; 
+            font-weight: 600;
+            border-bottom: 1px solid var(--accent);
+            box-shadow: 0 0 15px rgba(255, 183, 3, 0.2);
         }
         .ticker { 
             display: inline-block; 
-            animation: marquee 140s linear infinite; 
+            animation: marquee 30s linear infinite; 
             padding-right: 100%; 
         }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
+        /* --- HERO --- */
         .hero {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover; background-position: center; color: white;
-            padding: 3rem 1rem; text-align: center;
-            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), var(--bg-dark)), url('https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover; background-position: center; 
+            color: white;
+            padding: 4rem 1rem 3rem 1rem; 
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             position: relative;
         }
-        .hero h1 { font-size: 1.8rem; margin-bottom: 10px; line-height: 1.2; }
-        .hero h1 span { color: var(--accent); }
-        .hero p { font-size: 0.9rem; opacity: 0.9; margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero h1 { font-size: 2.2rem; margin-bottom: 15px; line-height: 1.2; font-weight: 800; }
+        .hero h1 span { color: var(--primary); text-shadow: 0 0 20px rgba(0, 191, 99, 0.4); }
+        .hero p { font-size: 1rem; color: #cbd5e1; margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
         
         .main-cta {
-            background: #25D366; color: white; padding: 12px 30px; border-radius: 50px;
-            text-decoration: none; font-size: 1.1rem; font-weight: bold;
+            background: var(--primary); 
+            color: white; 
+            padding: 14px 35px; 
+            border-radius: 50px;
+            text-decoration: none; 
+            font-size: 1.1rem; 
+            font-weight: bold;
             display: inline-flex; align-items: center; gap: 10px;
-            animation: pulse-gold 2s infinite; border: 2px solid white; cursor: pointer;
+            border: none; 
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 191, 99, 0.4);
+            transition: 0.3s;
+        }
+        .main-cta:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 191, 99, 0.6); }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        /* --- GLASS CARDS (Common Style) --- */
+        .calculator-area, .price-card, .feature-card, .pickup-line-box, .modal-box, .step-box {
+            background: var(--glass); /* White 92% Opacity */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            color: var(--text-main); /* Dark Text inside glass */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 15px; }
-
         .pickup-line-box {
-            text-align: center; background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white; padding: 15px; border-radius: 15px; margin: 15px 0;
-            font-style: italic; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center; 
+            padding: 20px; 
+            margin: 20px 0;
+            border-left: 5px solid var(--accent);
+        }
+        .date-badge {
+            background: var(--bg-dark); color: var(--accent);
+            display: inline-block; padding: 4px 12px; border-radius: 12px;
+            font-size: 0.7rem; font-weight: 700; margin-bottom: 8px;
+            text-transform: uppercase; letter-spacing: 1px;
         }
         
         /* CALCULATOR STYLES */
-        .calculator-area {
-            background: white; border-radius: 20px; padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 30px;
-            border-top: 5px solid var(--accent); position: relative;
-        }
+        .calculator-area { padding: 25px; margin-bottom: 30px; position: relative; }
         .fomo-tag {
-            background: var(--alert); color: white; padding: 4px 8px; border-radius: 5px;
-            font-size: 0.75rem; font-weight: bold; display: inline-block; margin-bottom: 10px;
-            animation: blink 2s infinite;
+            background: var(--primary); color: white; padding: 4px 10px; border-radius: 5px;
+            font-size: 0.75rem; font-weight: bold; display: inline-block; margin-bottom: 15px;
+            animation: blink 2s infinite; box-shadow: 0 0 10px var(--primary);
         }
 
-        .section-title { text-align: center; color: var(--primary); font-weight: 800; margin-bottom: 10px; font-size: 1.5rem; }
+        .section-title { 
+            text-align: center; color: var(--bg-dark); 
+            font-weight: 800; margin-bottom: 15px; font-size: 1.6rem; 
+        }
         
-        .calc-input-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
-        .form-control { padding: 12px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; outline: none; width: 100%; background: white;}
+        .calc-input-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+        .form-control { 
+            padding: 14px; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            font-size: 1rem; 
+            outline: none; 
+            width: 100%; 
+            background: white;
+            color: var(--text-main);
+            transition: 0.3s;
+        }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 191, 99, 0.1); }
         
         @media (max-width: 600px) {
             .calc-input-row { flex-direction: column; }
-            .form-control, .add-btn { width: 100%; margin-bottom: 5px; }
+            .form-control, .add-btn { width: 100%; margin-bottom: 8px; }
         }
 
         .add-btn { 
-            background: var(--dark); color: white; border: none; padding: 12px 25px; 
-            border-radius: 10px; cursor: pointer; font-weight: bold; 
-            display: flex; justify-content: center; align-items: center; gap: 5px; flex-grow: 1;
+            background: var(--bg-dark); color: white; border: none; padding: 14px 25px; 
+            border-radius: 12px; cursor: pointer; font-weight: bold; 
+            display: flex; justify-content: center; align-items: center; gap: 8px; flex-grow: 1;
+            transition: 0.3s;
         }
-        .add-btn:active { transform: scale(0.95); }
+        .add-btn:hover { background: black; color: var(--primary); }
 
-        .cart-wrapper { position: relative; }
+        .cart-wrapper { position: relative; margin-bottom: 15px; }
         .cart-list { 
-            list-style: none; margin-bottom: 15px; max-height: 200px; 
-            overflow-y: auto; border: 1px solid #eee; border-radius: 10px; padding: 5px;
+            list-style: none; max-height: 250px; 
+            overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px;
+            background: rgba(255,255,255,0.5);
         }
-        .scroll-indicator {
-            text-align: center; color: var(--primary); font-size: 1.2rem;
-            animation: bounce 2s infinite; display: none; margin-top: -10px; margin-bottom: 10px;
+        .cart-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #e2e8f0; align-items: center; font-size: 0.95rem; font-weight: 500; }
+        .cart-item .del-btn { color: var(--alert); cursor: pointer; margin-left: 10px; background: #fee2e2; padding: 6px; border-radius: 6px; }
+
+        .grand-total-box { 
+            background: #f0fdf4; /* Very light green bg */
+            padding: 20px; border-radius: 15px; text-align: center; 
+            border: 2px dashed var(--primary); 
         }
-        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-5px);} 60% {transform: translateY(-3px);} }
-
-        .cart-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px dashed #ddd; align-items: center; font-size: 0.9rem; }
-        .cart-item .del-btn { color: red; cursor: pointer; margin-left: 10px; padding: 5px; }
-
-        .grand-total-box { background: #e8f5e9; padding: 15px; border-radius: 10px; text-align: center; border: 2px dashed var(--primary); }
-        .grand-total-box h2 { color: var(--primary); font-size: 2rem; margin: 5px 0; }
+        .grand-total-box h2 { color: var(--bg-dark); font-size: 2.2rem; margin: 5px 0; font-weight: 800; }
+        .grand-total-box p { color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
 
         .fee-message { margin: 10px 0; padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; }
-        .fee-warning { background: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
-        .fee-success { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .fee-warning { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+        .fee-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
 
-        .price-card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .live-dot { height: 10px; width: 10px; background-color: #ff4444; border-radius: 50%; display: inline-block; animation: blink 1s infinite; margin-left: 5px; }
+        /* PRICE CARD */
+        .price-card { overflow: hidden; margin-top: 30px; }
+        .price-card-header { 
+            background: var(--bg-dark); color: white; padding: 18px; text-align: center;
+            border-bottom: 3px solid var(--primary);
+        }
+        .live-dot { height: 12px; width: 12px; background-color: var(--primary); border-radius: 50%; display: inline-block; animation: blink 1s infinite; margin-left: 8px; box-shadow: 0 0 10px var(--primary); }
         
-        .price-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        .price-table th { background: var(--dark); color: white; padding: 12px; text-align: left; }
-        .price-table td { padding: 12px; border-bottom: 1px solid #eee; font-weight: 500; }
-        .highlight-price { color: var(--primary); font-weight: bold; }
+        .price-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        .price-table th { background: #e2e8f0; color: var(--bg-dark); padding: 14px; text-align: left; font-weight: 700; }
+        .price-table td { padding: 14px; border-bottom: 1px solid #f1f5f9; font-weight: 500; color: var(--text-main); }
+        .highlight-price { color: var(--primary); font-weight: 800; font-size: 1.1rem; }
 
-        .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0; }
-        .feature-card { background: white; padding: 15px; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .feature-card i { font-size: 1.5rem; color: var(--secondary); margin-bottom: 8px; }
-        .feature-card h4 { font-size: 0.8rem; font-weight: bold; }
-        .feature-card p { font-size: 0.7rem; color: #666; }
+        /* FEATURES */
+        .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 30px 0; }
+        .feature-card { padding: 20px; text-align: center; transition: transform 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .feature-card i { font-size: 1.8rem; color: var(--primary); margin-bottom: 12px; }
+        .feature-card h4 { font-size: 0.9rem; font-weight: 800; color: var(--bg-dark); }
+        .feature-card p { font-size: 0.75rem; color: #64748b; font-weight: 500; }
 
-        /* --- PROFESSIONAL FOOTER (Original Colors) --- */
+        /* --- FOOTER --- */
         footer { 
-            background: #111; color: #ccc; 
-            padding: 50px 0 20px 0; 
-            margin-top: 0px; 
-            border-top: 4px solid var(--accent); 
-            border-bottom: none; 
+            background: rgba(15, 23, 42, 0.95); /* Dark Slate */
+            color: #94a3b8; 
+            padding: 60px 0 20px 0; 
+            margin-top: 40px; 
+            border-top: 1px solid rgba(255,255,255,0.1); 
         }
         .footer-wrapper {
             max-width: 1000px; margin: 0 auto; padding: 0 20px;
-            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px;
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;
         }
         .footer-left, .footer-right { flex: 1; min-width: 280px; }
         
-        .footer-logo { font-size: 1.4rem; color: white; font-weight: 800; display: block; margin-bottom: 15px; }
-        .footer-left p { line-height: 1.6; font-size: 0.9rem; margin-bottom: 10px; }
+        .footer-logo { font-size: 1.5rem; color: white; font-weight: 800; display: block; margin-bottom: 20px; }
+        .footer-left p { line-height: 1.7; font-size: 0.95rem; margin-bottom: 12px; }
+        .footer-left i { color: var(--primary); width: 20px; }
         
         .footer-right { display: flex; flex-direction: column; align-items: flex-end; }
-        .footer-right h4 { color: white; margin-bottom: 15px; border-bottom: 2px solid var(--accent); padding-bottom: 5px; display: inline-block; }
+        .footer-right h4 { color: white; margin-bottom: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 5px; display: inline-block; font-size: 1.1rem; }
         .footer-links { list-style: none; text-align: right; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a { color: #ccc; text-decoration: none; transition: 0.3s; font-size: 0.95rem; display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
-        .footer-links a:hover { color: var(--accent); transform: translateX(-5px); }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { color: #cbd5e1; text-decoration: none; transition: 0.3s; font-size: 1rem; display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+        .footer-links a:hover { color: var(--primary); transform: translateX(-5px); }
 
         .back-to-top-btn {
-            background: rgba(255,255,255,0.1); color: var(--accent); padding: 8px 15px;
-            border-radius: 5px; text-decoration: none; display: inline-flex;
-            align-items: center; gap: 8px; margin-top: 15px; cursor: pointer;
-            border: 1px solid var(--accent); transition: 0.3s; font-size: 0.8rem;
+            background: rgba(255,255,255,0.05); color: var(--primary); padding: 10px 20px;
+            border-radius: 8px; text-decoration: none; display: inline-flex;
+            align-items: center; gap: 8px; margin-top: 20px; cursor: pointer;
+            border: 1px solid var(--primary); transition: 0.3s; font-size: 0.85rem; font-weight: 600;
         }
-        .back-to-top-btn:hover { background: var(--accent); color: var(--dark); }
+        .back-to-top-btn:hover { background: var(--primary); color: white; }
 
-        .copyright { text-align: center; margin-top: 40px; border-top: 1px solid #333; padding-top: 20px; font-size: 0.8rem; width: 100%; }
+        .copyright { text-align: center; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; font-size: 0.85rem; width: 100%; color: #64748b; }
         
-        .automation-text { color: var(--ai-color); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .automation-text { color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
         .big-x { font-size: 1.8rem; color: var(--accent); vertical-align: sub; line-height: 0; margin-left: 1px; }
 
         @media(max-width: 600px) {
@@ -243,95 +319,76 @@
             .footer-right { align-items: center; }
             .footer-links { text-align: center; }
             .footer-links a { justify-content: center; }
-            .footer-links a:hover { transform: translateX(5px); }
+            .hero { padding-top: 3rem; }
+            .hero h1 { font-size: 1.8rem; }
         }
 
         /* --- VISUAL HOW IT WORKS --- */
         .steps-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
-        .step-box { background: #f8f9fa; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #eee; }
-        .step-icon { width: 50px; height: 50px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; font-size: 1.2rem; }
-        .step-title { font-weight: bold; color: var(--dark); font-size: 0.9rem; margin-bottom: 5px; }
-        .step-desc { font-size: 0.75rem; color: #666; line-height: 1.4; }
+        .step-box { text-align: center; border: 1px solid #e2e8f0; }
+        .step-icon { width: 50px; height: 50px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,191,99,0.3); }
+        .step-title { font-weight: 800; color: var(--bg-dark); font-size: 0.9rem; margin-bottom: 5px; }
+        .step-desc { font-size: 0.75rem; color: #64748b; line-height: 1.4; }
 
-        /* ALL MODALS (Address, Privacy, FAQ) */
+        /* MODALS */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 2000;
-            display: none; justify-content: center; align-items: flex-end; /* Bottom sheet on mobile */
+            background: rgba(15, 23, 42, 0.9); /* Dark overlay */
+            z-index: 2000;
+            display: none; justify-content: center; align-items: flex-end;
+            backdrop-filter: blur(5px);
         }
         .modal-box {
-            background: white; width: 100%; max-width: 500px;
-            padding: 25px; border-top-left-radius: 20px; border-top-right-radius: 20px;
+            width: 100%; max-width: 500px;
+            padding: 30px; border-top-left-radius: 25px; border-top-right-radius: 25px;
             animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
-        .modal-box h3 { color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .modal-box h3 { color: var(--bg-dark); margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 1.4rem; font-weight: 800; }
         
-        /* INPUT FIELDS IN MODAL */
-        .modal-label { font-size: 0.8rem; color:#666; font-weight:bold; display: block; margin-top: 10px; }
+        .modal-label { font-size: 0.85rem; color: #64748b; font-weight: 700; display: block; margin-top: 15px; }
         .modal-box textarea, .modal-box input, .modal-box select {
-            width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px;
-            margin-top: 5px; font-family: 'Poppins', sans-serif; font-size: 1rem;
+            width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px;
+            margin-top: 8px; font-family: 'Poppins', sans-serif; font-size: 1rem; outline: none; transition: 0.3s;
         }
-        .modal-box textarea { height: 70px; }
-        .close-modal-btn { font-size: 1.5rem; cursor: pointer; color: #666; }
+        .modal-box input:focus { border-color: var(--primary); }
+        .modal-box textarea { height: 80px; }
+        .close-modal-btn { font-size: 1.8rem; cursor: pointer; color: #94a3b8; transition: 0.3s; }
+        .close-modal-btn:hover { color: var(--alert); }
         
-        /* DATE TIME ROW */
-        .date-time-row { display: flex; gap: 10px; }
+        .date-time-row { display: flex; gap: 15px; }
         
-        /* --- ACCORDION STYLES FOR MODAL (CLICK TO OPEN) --- */
+        /* ACCORDION */
         details {
-            background: #f8f9fa;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            margin-bottom: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 12px;
             overflow: hidden;
             transition: all 0.3s ease;
         }
         details summary {
-            padding: 15px;
-            font-weight: 600;
+            padding: 18px;
+            font-weight: 700;
             cursor: pointer;
-            list-style: none; /* Remove default triangle */
+            list-style: none;
             position: relative;
             padding-right: 40px;
-            color: var(--dark);
+            color: var(--bg-dark);
         }
-        /* Custom Plus Icon */
         details summary::after {
-            content: '+';
-            position: absolute;
-            right: 15px;
-            font-size: 1.2rem;
-            color: var(--primary);
-            font-weight: bold;
+            content: '+'; position: absolute; right: 20px; font-size: 1.4rem; color: var(--primary); font-weight: 800;
         }
-        details[open] summary::after {
-            content: '-';
-            color: var(--alert);
-        }
-        details[open] summary {
-            border-bottom: 1px solid #eee;
-            background: #fff;
-            color: var(--primary);
-        }
-        details p, details ul, details div {
-            padding: 15px;
-            font-size: 0.9rem;
-            color: #555;
-            line-height: 1.6;
-            background: white;
-            margin: 0;
-            border-top: 1px solid #f0f0f0;
-        }
+        details[open] summary::after { content: '-'; color: var(--alert); }
+        details[open] summary { border-bottom: 1px solid #e2e8f0; background: white; color: var(--primary); }
+        details p, details ul, details div { padding: 18px; font-size: 0.95rem; color: #475569; line-height: 1.6; background: white; margin: 0; }
 
         @media(min-width: 600px) {
             .features-grid { grid-template-columns: repeat(4, 1fr); } 
             .modal-overlay { align-items: center; }
             .modal-box { border-radius: 20px; }
         }
-
         /* --- CSS STYLES END --- */
     </style>
 </head>
@@ -348,9 +405,7 @@
             <input type="tel" id="customerMobile" placeholder="Ex: 9876543210" maxlength="10">
 
             <label class="modal-label">3. Pincode / पिन कोड</label>
-            <input type="number" id="customerPincode" placeholder="Ex: 321001" maxlength="6">
-
-            <div class="date-time-row">
+            <input type="number" id="customerPincode" placeholder="Ex: 321001" maxlength="6"> <div class="date-time-row">
                 <div style="flex:1;">
                     <label class="modal-label">4. Date / तारीख</label>
                     <input type="date" id="pickupDate">
@@ -364,7 +419,7 @@
             <label class="modal-label">6. Full Address / पूरा पता</label>
             <textarea id="customerAddress" placeholder="Ex: House No. 12, Near Temple, Main Market..."></textarea>
             
-            <button onclick="sendFinalWhatsApp()" class="main-cta" style="width: 100%; justify-content: center; border:none; font-size: 1rem; margin-top: 15px;">
+            <button onclick="sendFinalWhatsApp()" class="main-cta" style="width: 100%; justify-content: center; border:none; font-size: 1rem; margin-top: 25px;">
                 <i class="fab fa-whatsapp"></i> <span id="confirmBtn">Confirm & Send</span>
             </button>
         </div>
@@ -375,7 +430,7 @@
             <h3 id="infoModalTitle">Information <span class="close-modal-btn" onclick="closeAllModals()">&times;</span></h3>
             <div id="infoModalContent" class="info-text"></div>
             
-            <button onclick="closeAllModals()" style="width:100%; background:#eee; color:#333; border:none; padding:12px; margin-top:20px; border-radius:10px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
+            <button onclick="closeAllModals()" style="width:100%; background:#f1f5f9; color:#475569; border:none; padding:15px; margin-top:25px; border-radius:12px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;">
                 <i class="fas fa-arrow-left"></i> Close / बंद करें
             </button>
         </div>
@@ -466,14 +521,14 @@
                 <p id="totalLabel">Estimated Total:</p>
                 <h2 id="grandTotal">₹0</h2>
                 
-                <div onclick="openAddressModal()" id="mainActionBtn" class="main-cta" style="width: 100%; justify-content: center; margin-top: 10px; font-size: 1rem;">
+                <div onclick="openAddressModal()" id="mainActionBtn" class="main-cta" style="width: 100%; justify-content: center; margin-top: 20px; font-size: 1rem;">
                     <span id="whatsappBtnText">Proceed to Address <i class="fas fa-arrow-right"></i></span>
                 </div>
             </div>
         </div>
 
         <div class="price-card">
-            <div style="background: var(--dark); color: white; padding: 15px; text-align: center;">
+            <div class="price-card-header">
                 <h3 style="margin:0; font-size: 1.1rem;">📉 Live Rate List <span class="live-dot"></span></h3>
             </div>
             <table class="price-table" id="rateTable">
@@ -829,7 +884,7 @@
             db.collection("rates").orderBy("name").onSnapshot((snapshot) => {
                 liveRatesData = []; 
                 let tableHTML = "";
-                let tickerHTML = `<span style="color:red; font-weight:bold;">🔴 Live:</span> &nbsp; `;
+                let tickerHTML = `<span style="color:var(--primary); font-weight:800;">🔴 Live:</span> &nbsp; `;
                 const itemSelect = document.getElementById('itemSelect');
                 
                 itemSelect.innerHTML = '<option value="" disabled selected>Select Item</option>';
@@ -918,6 +973,7 @@
             const cartList = document.getElementById('cartList');
             const grandTotalElement = document.getElementById('grandTotal');
             const feeBox = document.getElementById('feeBox');
+            const scrollArrow = document.getElementById('scrollArrow'); // Added reference
             let totalAmount = 0;
             let listHTML = "";
 
@@ -954,10 +1010,13 @@
                 feeBox.style.display = 'none';
                 document.getElementById('mainActionBtn').style.display = 'none';
                 cartList.innerHTML = '<li style="text-align:center; padding:15px; color:#666;">Add items to start calculation!</li>';
+                scrollArrow.style.display = 'none'; // Hide scroll indicator
             } else {
                 feeBox.style.display = 'block';
                 feeBox.innerHTML = feeMessageHTML;
                 document.getElementById('mainActionBtn').style.display = 'flex';
+                // Show scroll indicator if content overflows
+                scrollArrow.style.display = cartList.scrollHeight > cartList.clientHeight ? 'block' : 'none'; 
             }
         }
 
@@ -966,21 +1025,31 @@
         function openModalAndPushState(modalId) {
             const modal = document.getElementById(modalId);
             modal.style.display = 'flex';
-            history.pushState({ modal: modalId }, '', `#${modalId}`);
+            // Push state only if it's not already in the history to prevent double entries on refresh
+            if (window.location.hash !== `#${modalId}`) {
+                history.pushState({ modal: modalId }, '', `#${modalId}`);
+            }
         }
 
         function closeAllModals() {
             document.getElementById('addressModal').style.display = 'none';
             document.getElementById('infoModal').style.display = 'none';
-            if(window.location.hash) {
-                 history.back();
+            // Only go back in history if a modal hash exists
+            if(window.location.hash.includes('Modal')) {
+                 history.back(); 
             }
         }
 
         window.addEventListener('popstate', function(event) {
+            // Check if any modal is currently visible on popstate
+            const isAddressModalVisible = document.getElementById('addressModal').style.display === 'flex';
+            const isInfoModalVisible = document.getElementById('infoModal').style.display === 'flex';
+
             if (event.state && event.state.modal) {
+                // If a state exists, show the corresponding modal (handle forward/back within modals)
                 document.getElementById(event.state.modal).style.display = 'flex';
-            } else {
+            } else if (isAddressModalVisible || isInfoModalVisible) {
+                // If no state exists (means going back to root URL) but a modal is open, close them
                 document.getElementById('addressModal').style.display = 'none';
                 document.getElementById('infoModal').style.display = 'none';
             }
@@ -990,7 +1059,8 @@
             const addressModal = document.getElementById('addressModal');
             const infoModal = document.getElementById('infoModal');
 
-            if (event.target === addressModal || event.target === infoModal) {
+            // Check if the click is directly on the overlay (not the box inside)
+            if ((event.target === addressModal || event.target === infoModal) && event.target.classList.contains('modal-overlay')) {
                 closeAllModals();
             }
         });
@@ -1015,9 +1085,10 @@
             openModalAndPushState('infoModal');
         }
 
-        // --- 6. WHATSAPP & MISC FUNCTIONS ---
+        // --- 6. WHATSAPP & MISC FUNCTIONS (FIXED) ---
 
         function sendFinalWhatsApp() {
+            // 1. FORM VALUES FETCH
             const name = document.getElementById('customerName').value.trim();
             const mobile = document.getElementById('customerMobile').value.trim();
             const pincode = document.getElementById('customerPincode').value.trim();
@@ -1026,12 +1097,70 @@
             const address = document.getElementById('customerAddress').value.trim();
 
             if (!name || !mobile || mobile.length !== 10 || !pincode || !date || !time || !address) {
-                alert("Please fill all the details correctly!");
+                alert(isHindi ? "कृपया सभी विवरण सही ढंग से भरें!" : "Please fill all the details correctly!");
                 return;
             }
 
-            let cartDetails = cart.map(item => `*${item.name}:* ${item.weight} ${item.unit} = ₹${item.total.toFixed(2)}`).join('\n');
+            // Cart Details for DB & WhatsApp Message
+            let cartDetailsForDB = cart.map(item => ({
+                name: item.name,
+                weight: item.weight,
+                unit: item.unit,
+                total: item.total
+            }));
+            
+            // 2. FIREBASE SAVING LOGIC (Firestore)
+            if (db) {
+                document.getElementById('confirmBtn').textContent = isHindi ? "सेव किया जा रहा है..." : "Saving...";
+                document.querySelector('#addressModal .main-cta').disabled = true; // Disable button
 
+                db.collection('pickups').add({
+                    // Customer Details
+                    name: name,
+                    mobile: mobile,
+                    pincode: pincode,
+                    address: address,
+                    
+                    // Pickup Timing
+                    pickupDate: date,
+                    pickupTime: time,
+                    
+                    // Order Details
+                    orderItems: cartDetailsForDB,
+                    grandTotal: finalGrandTotal,
+                    
+                    // Status and Timestamp
+                    status: 'Pending', // ताकि एडमिन को पता चले कि नया रिक्वेस्ट है
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                .then(() => {
+                    console.log("✅ Pickup Request Saved to Firestore!");
+                    // 3. PROCEED TO WHATSAPP ONLY AFTER SAVING TO DB
+                    openWhatsAppLink(name, mobile, pincode, date, time, address, cartDetailsForDB);
+                    
+                    // Re-enable and reset button text
+                    document.querySelector('#addressModal .main-cta').disabled = false; 
+                    document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
+                })
+                .catch((error) => {
+                    console.error("⚠️ Error saving document to Firestore: ", error);
+                    alert(isHindi ? "माफ करें, आपका अनुरोध सहेजने में कोई समस्या आई। कृपया पुनः प्रयास करें या हमें सीधे कॉल करें।" : "Sorry, there was an issue saving your request. Please try again or call us.");
+                    
+                    // Re-enable and reset button text
+                    document.querySelector('#addressModal .main-cta').disabled = false; 
+                    document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
+                });
+            } else {
+                 alert(isHindi ? "डेटाबेस कनेक्ट नहीं है। कृपया हमें सीधे कॉल करें।" : "Database not connected. Please call us directly.");
+            }
+        }
+
+
+        function openWhatsAppLink(name, mobile, pincode, date, time, address, cartDetails) {
+            // WhatsApp मैसेज का Text तैयार करना 
+            // Convert cartDetails array back to string format for WhatsApp message
+            let cartText = cartDetails.map(item => `*${item.name}:* ${item.weight} ${item.unit} = ₹${item.total.toFixed(2)}`).join('\n');
+            
             const message = `
 *✅ New Pickup Request*
 
@@ -1044,7 +1173,7 @@
 
 ---
 *💰 Estimated Bill:*
-${cartDetails}
+${cartText}
 *GRAND TOTAL:* ₹${finalGrandTotal.toFixed(2)}
 
 _Please contact me for confirmation._
@@ -1053,7 +1182,7 @@ _Please contact me for confirmation._
             const whatsappUrl = `https://wa.me/${ownerPhone}?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }
-
+        
         function callOwner() {
             window.location.href = `tel:+${ownerPhone}`;
         }
