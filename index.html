@@ -13,6 +13,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics-compat.js"></script>
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1b5e20">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3176/3176363.png">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -978,6 +982,14 @@
         function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
         window.onload = () => { loadLiveRates(); renderCart(); };
+        // --- PWA REGISTRATION CODE ---
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+        navigator.serviceWorker.register("sw.js")
+            .then(res => console.log("✅ App Ready to Install"))
+            .catch(err => console.log("❌ App Failed", err));
+    });
+}
     </script>
 </body>
 </html>
