@@ -21,7 +21,6 @@
             --bg-dark: #0f172a;       /* Slate 900 - Background */
             --accent: #ffb703;        /* Golden Yellow - Highlights */
             --glass: rgba(255, 255, 255, 0.92); /* Glass Effect */
-            --glass-border: rgba(255, 255, 255, 0.1);
             
             --text-main: #0f172a;     /* Dark Text for inside Glass */
             --text-light: #f8fafc;    /* Light Text for Dark Background */
@@ -35,15 +34,13 @@
             color: var(--text-light); 
             overflow-x: hidden; 
             transition: all 0.3s ease; 
-            padding-bottom: 0px; 
         }
 
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        @keyframes glow { 0% { box-shadow: 0 0 5px var(--primary); } 50% { box-shadow: 0 0 20px var(--primary); } 100% { box-shadow: 0 0 5px var(--primary); } }
 
-        /* --- NAVBAR (Updated to Slate 900 + Emerald) --- */
+        /* --- NAVBAR --- */
         .navbar {
-            background: rgba(15, 23, 42, 0.95); /* Slate 900 with slight transparency */
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
             padding: 15px 20px;
             display: flex;
@@ -57,144 +54,71 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-        .logo-icon-img {
-            font-size: 2.2rem;
-            color: var(--primary); /* Emerald Green Logo */
-            filter: drop-shadow(0 0 5px rgba(0, 191, 99, 0.5));
-        }
-        .logo-text-group {
-            display: flex;
-            flex-direction: column;
-            line-height: 1;
-        }
-        .logo-main-text {
-            font-weight: 800;
-            font-size: 1.3rem;
-            color: white;
-            letter-spacing: 0.5px;
-        }
-        .logo-sub-text {
-            font-weight: 500;
-            font-size: 0.8rem;
-            color: var(--primary); /* Emerald Subtext */
-            align-self: flex-start; 
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+        .logo-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .logo-icon-img { font-size: 2.2rem; color: var(--primary); filter: drop-shadow(0 0 5px rgba(0, 191, 99, 0.5)); }
+        .logo-text-group { display: flex; flex-direction: column; line-height: 1; }
+        .logo-main-text { font-weight: 800; font-size: 1.3rem; color: white; letter-spacing: 0.5px; }
+        .logo-sub-text { font-weight: 500; font-size: 0.8rem; color: var(--primary); align-self: flex-start; letter-spacing: 2px; text-transform: uppercase; }
 
         .nav-actions { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
         
         .lang-btn {
-            background: transparent; 
-            border: 1px solid var(--primary);
-            color: var(--primary); 
-            padding: 7px 15px; 
-            border-radius: 50px; 
-            font-size: 0.8rem;
-            cursor: pointer; 
-            transition: 0.3s; 
-            font-weight: 600;
+            background: transparent; border: 1px solid var(--primary); color: var(--primary); 
+            padding: 7px 15px; border-radius: 50px; font-size: 0.8rem; cursor: pointer; transition: 0.3s; font-weight: 600;
         }
         .lang-btn:hover { background: var(--primary); color: white; box-shadow: 0 0 10px var(--primary); }
 
         .call-btn { 
-            background: var(--primary); 
-            color: white; 
-            padding: 8px 18px; 
-            border-radius: 50px; 
-            text-decoration: none; 
-            font-weight: 700; 
-            font-size: 0.9rem; 
-            cursor: pointer; 
-            white-space: nowrap;
-            display: flex; align-items: center; gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 191, 99, 0.3);
+            background: var(--primary); color: white; padding: 8px 18px; border-radius: 50px; 
+            text-decoration: none; font-weight: 700; font-size: 0.9rem; cursor: pointer; 
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(0, 191, 99, 0.3);
             transition: transform 0.2s;
         }
         .call-btn:hover { transform: translateY(-2px); background: var(--primary-hover); }
 
-        /* --- TICKER (Golden Yellow) --- */
+        /* --- TICKER --- */
         .ticker-wrap { 
-            background: #000; /* Pure Black for contrast */
-            color: var(--accent); /* Golden Yellow Text */
-            overflow: hidden; 
-            white-space: nowrap; 
-            padding: 10px 0; 
-            font-size: 0.95rem; 
-            font-weight: 600;
-            border-bottom: 1px solid var(--accent);
+            background: #000; color: var(--accent); overflow: hidden; white-space: nowrap; 
+            padding: 10px 0; font-size: 0.95rem; font-weight: 600; border-bottom: 1px solid var(--accent);
             box-shadow: 0 0 15px rgba(255, 183, 3, 0.2);
         }
-        .ticker { 
-            display: inline-block; 
-            animation: marquee 30s linear infinite; 
-            padding-right: 100%; 
-        }
+        .ticker { display: inline-block; animation: marquee 30s linear infinite; padding-right: 100%; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
         /* --- HERO --- */
         .hero {
             background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), var(--bg-dark)), url('https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover; background-position: center; 
-            color: white;
-            padding: 4rem 1rem 3rem 1rem; 
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: relative;
+            background-size: cover; background-position: center; color: white;
+            padding: 4rem 1rem 3rem 1rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         .hero h1 { font-size: 2.2rem; margin-bottom: 15px; line-height: 1.2; font-weight: 800; }
         .hero h1 span { color: var(--primary); text-shadow: 0 0 20px rgba(0, 191, 99, 0.4); }
-        .hero p { font-size: 1rem; color: #cbd5e1; margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero p { font-size: 1rem; color: #cbd5e1; margin-bottom: 25px; max-width: 600px; margin: 0 auto 25px auto; }
         
         .main-cta {
-            background: var(--primary); 
-            color: white; 
-            padding: 14px 35px; 
-            border-radius: 50px;
-            text-decoration: none; 
-            font-size: 1.1rem; 
-            font-weight: bold;
-            display: inline-flex; align-items: center; gap: 10px;
-            border: none; 
-            cursor: pointer;
-            box-shadow: 0 0 20px rgba(0, 191, 99, 0.4);
-            transition: 0.3s;
+            background: var(--primary); color: white; padding: 14px 35px; border-radius: 50px;
+            text-decoration: none; font-size: 1.1rem; font-weight: bold;
+            display: inline-flex; align-items: center; gap: 10px; border: none; cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 191, 99, 0.4); transition: 0.3s;
         }
         .main-cta:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 191, 99, 0.6); }
 
         .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
 
-        /* --- GLASS CARDS (Common Style) --- */
+        /* --- CARDS --- */
         .calculator-area, .price-card, .feature-card, .pickup-line-box, .modal-box, .step-box {
-            background: var(--glass); /* White 92% Opacity */
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 20px;
-            color: var(--text-main); /* Dark Text inside glass */
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px; color: var(--text-main);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
-        .pickup-line-box {
-            text-align: center; 
-            padding: 20px; 
-            margin: 20px 0;
-            border-left: 5px solid var(--accent);
-        }
+        .pickup-line-box { text-align: center; padding: 20px; margin: 20px 0; border-left: 5px solid var(--accent); }
         .date-badge {
-            background: var(--bg-dark); color: var(--accent);
-            display: inline-block; padding: 4px 12px; border-radius: 12px;
-            font-size: 0.7rem; font-weight: 700; margin-bottom: 8px;
-            text-transform: uppercase; letter-spacing: 1px;
+            background: var(--bg-dark); color: var(--accent); display: inline-block; padding: 4px 12px; 
+            border-radius: 12px; font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;
         }
         
-        /* CALCULATOR STYLES */
+        /* CALCULATOR */
         .calculator-area { padding: 25px; margin-bottom: 30px; position: relative; }
         .fomo-tag {
             background: var(--primary); color: white; padding: 4px 10px; border-radius: 5px;
@@ -202,65 +126,41 @@
             animation: blink 2s infinite; box-shadow: 0 0 10px var(--primary);
         }
 
-        .section-title { 
-            text-align: center; color: var(--bg-dark); 
-            font-weight: 800; margin-bottom: 15px; font-size: 1.6rem; 
-        }
+        .section-title { text-align: center; color: var(--bg-dark); font-weight: 800; margin-bottom: 15px; font-size: 1.6rem; }
         
         .calc-input-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
         .form-control { 
-            padding: 14px; 
-            border: 2px solid #e2e8f0; 
-            border-radius: 12px; 
-            font-size: 1rem; 
-            outline: none; 
-            width: 100%; 
-            background: white;
-            color: var(--text-main);
-            transition: 0.3s;
+            padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; width: 100%; 
+            background: white; color: var(--text-main); transition: 0.3s;
         }
         .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 191, 99, 0.1); }
         
-        @media (max-width: 600px) {
-            .calc-input-row { flex-direction: column; }
-            .form-control, .add-btn { width: 100%; margin-bottom: 8px; }
-        }
+        @media (max-width: 600px) { .calc-input-row { flex-direction: column; } .form-control, .add-btn { width: 100%; margin-bottom: 8px; } }
 
         .add-btn { 
             background: var(--bg-dark); color: white; border: none; padding: 14px 25px; 
-            border-radius: 12px; cursor: pointer; font-weight: bold; 
-            display: flex; justify-content: center; align-items: center; gap: 8px; flex-grow: 1;
-            transition: 0.3s;
+            border-radius: 12px; cursor: pointer; font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 8px; flex-grow: 1; transition: 0.3s;
         }
         .add-btn:hover { background: black; color: var(--primary); }
 
         .cart-wrapper { position: relative; margin-bottom: 15px; }
         .cart-list { 
-            list-style: none; max-height: 250px; 
-            overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px;
-            background: rgba(255,255,255,0.5);
+            list-style: none; max-height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; 
+            border-radius: 12px; padding: 10px; background: rgba(255,255,255,0.5);
         }
         .cart-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #e2e8f0; align-items: center; font-size: 0.95rem; font-weight: 500; }
         .cart-item .del-btn { color: var(--alert); cursor: pointer; margin-left: 10px; background: #fee2e2; padding: 6px; border-radius: 6px; }
 
-        .grand-total-box { 
-            background: #f0fdf4; /* Very light green bg */
-            padding: 20px; border-radius: 15px; text-align: center; 
-            border: 2px dashed var(--primary); 
-        }
+        .grand-total-box { background: #f0fdf4; padding: 20px; border-radius: 15px; text-align: center; border: 2px dashed var(--primary); }
         .grand-total-box h2 { color: var(--bg-dark); font-size: 2.2rem; margin: 5px 0; font-weight: 800; }
-        .grand-total-box p { color: #64748b; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
-
+        
         .fee-message { margin: 10px 0; padding: 10px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; }
         .fee-warning { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
         .fee-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
 
-        /* PRICE CARD */
+        /* PRICE LIST */
         .price-card { overflow: hidden; margin-top: 30px; }
-        .price-card-header { 
-            background: var(--bg-dark); color: white; padding: 18px; text-align: center;
-            border-bottom: 3px solid var(--primary);
-        }
+        .price-card-header { background: var(--bg-dark); color: white; padding: 18px; text-align: center; border-bottom: 3px solid var(--primary); }
         .live-dot { height: 12px; width: 12px; background-color: var(--primary); border-radius: 50%; display: inline-block; animation: blink 1s infinite; margin-left: 8px; box-shadow: 0 0 10px var(--primary); }
         
         .price-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
@@ -276,25 +176,11 @@
         .feature-card h4 { font-size: 0.9rem; font-weight: 800; color: var(--bg-dark); }
         .feature-card p { font-size: 0.75rem; color: #64748b; font-weight: 500; }
 
-        /* --- FOOTER --- */
-        footer { 
-            background: rgba(15, 23, 42, 0.95); /* Dark Slate */
-            color: #94a3b8; 
-            padding: 60px 0 20px 0; 
-            margin-top: 40px; 
-            border-top: 1px solid rgba(255,255,255,0.1); 
-        }
-        .footer-wrapper {
-            max-width: 1000px; margin: 0 auto; padding: 0 20px;
-            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;
-        }
+        /* FOOTER */
+        footer { background: rgba(15, 23, 42, 0.95); color: #94a3b8; padding: 60px 0 20px 0; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .footer-wrapper { max-width: 1000px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; }
         .footer-left, .footer-right { flex: 1; min-width: 280px; }
-        
         .footer-logo { font-size: 1.5rem; color: white; font-weight: 800; display: block; margin-bottom: 20px; }
-        .footer-left p { line-height: 1.7; font-size: 0.95rem; margin-bottom: 12px; }
-        .footer-left i { color: var(--primary); width: 20px; }
-        
-        .footer-right { display: flex; flex-direction: column; align-items: flex-end; }
         .footer-right h4 { color: white; margin-bottom: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 5px; display: inline-block; font-size: 1.1rem; }
         .footer-links { list-style: none; text-align: right; }
         .footer-links li { margin-bottom: 12px; }
@@ -302,51 +188,32 @@
         .footer-links a:hover { color: var(--primary); transform: translateX(-5px); }
 
         .back-to-top-btn {
-            background: rgba(255,255,255,0.05); color: var(--primary); padding: 10px 20px;
-            border-radius: 8px; text-decoration: none; display: inline-flex;
-            align-items: center; gap: 8px; margin-top: 20px; cursor: pointer;
+            background: rgba(255,255,255,0.05); color: var(--primary); padding: 10px 20px; border-radius: 8px; 
+            text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; cursor: pointer; 
             border: 1px solid var(--primary); transition: 0.3s; font-size: 0.85rem; font-weight: 600;
         }
         .back-to-top-btn:hover { background: var(--primary); color: white; }
-
         .copyright { text-align: center; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; font-size: 0.85rem; width: 100%; color: #64748b; }
         
-        .automation-text { color: var(--primary); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .big-x { font-size: 1.8rem; color: var(--accent); vertical-align: sub; line-height: 0; margin-left: 1px; }
-
         @media(max-width: 600px) {
             .footer-wrapper { flex-direction: column; text-align: center; }
             .footer-right { align-items: center; }
             .footer-links { text-align: center; }
             .footer-links a { justify-content: center; }
-            .hero { padding-top: 3rem; }
-            .hero h1 { font-size: 1.8rem; }
         }
-
-        /* --- VISUAL HOW IT WORKS --- */
-        .steps-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
-        .step-box { text-align: center; border: 1px solid #e2e8f0; }
-        .step-icon { width: 50px; height: 50px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,191,99,0.3); }
-        .step-title { font-weight: 800; color: var(--bg-dark); font-size: 0.9rem; margin-bottom: 5px; }
-        .step-desc { font-size: 0.75rem; color: #64748b; line-height: 1.4; }
 
         /* MODALS */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.9); /* Dark overlay */
-            z-index: 2000;
-            display: none; justify-content: center; align-items: flex-end;
-            backdrop-filter: blur(5px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.9); z-index: 2000;
+            display: none; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px);
         }
         .modal-box {
-            width: 100%; max-width: 500px;
-            padding: 30px; border-top-left-radius: 25px; border-top-right-radius: 25px;
+            width: 100%; max-width: 500px; padding: 30px; border-top-left-radius: 25px; border-top-right-radius: 25px;
             animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         
         .modal-box h3 { color: var(--bg-dark); margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 1.4rem; font-weight: 800; }
-        
         .modal-label { font-size: 0.85rem; color: #64748b; font-weight: 700; display: block; margin-top: 15px; }
         .modal-box textarea, .modal-box input, .modal-box select {
             width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 12px;
@@ -358,37 +225,23 @@
         .close-modal-btn:hover { color: var(--alert); }
         
         .date-time-row { display: flex; gap: 15px; }
-        
+
+        /* VISUAL HOW IT WORKS */
+        .steps-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .step-box { text-align: center; border: 1px solid #e2e8f0; }
+        .step-icon { width: 50px; height: 50px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px auto; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,191,99,0.3); }
+        .step-title { font-weight: 800; color: var(--bg-dark); font-size: 0.9rem; margin-bottom: 5px; }
+        .step-desc { font-size: 0.75rem; color: #64748b; line-height: 1.4; }
+
         /* ACCORDION */
-        details {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        details summary {
-            padding: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            list-style: none;
-            position: relative;
-            padding-right: 40px;
-            color: var(--bg-dark);
-        }
-        details summary::after {
-            content: '+'; position: absolute; right: 20px; font-size: 1.4rem; color: var(--primary); font-weight: 800;
-        }
+        details { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px; overflow: hidden; transition: all 0.3s ease; }
+        details summary { padding: 18px; font-weight: 700; cursor: pointer; list-style: none; position: relative; padding-right: 40px; color: var(--bg-dark); }
+        details summary::after { content: '+'; position: absolute; right: 20px; font-size: 1.4rem; color: var(--primary); font-weight: 800; }
         details[open] summary::after { content: '-'; color: var(--alert); }
         details[open] summary { border-bottom: 1px solid #e2e8f0; background: white; color: var(--primary); }
         details p, details ul, details div { padding: 18px; font-size: 0.95rem; color: #475569; line-height: 1.6; background: white; margin: 0; }
 
-        @media(min-width: 600px) {
-            .features-grid { grid-template-columns: repeat(4, 1fr); } 
-            .modal-overlay { align-items: center; }
-            .modal-box { border-radius: 20px; }
-        }
+        @media(min-width: 600px) { .features-grid { grid-template-columns: repeat(4, 1fr); } .modal-overlay { align-items: center; } .modal-box { border-radius: 20px; } }
         /* --- CSS STYLES END --- */
     </style>
 </head>
@@ -405,7 +258,9 @@
             <input type="tel" id="customerMobile" placeholder="Ex: 9876543210" maxlength="10">
 
             <label class="modal-label">3. Pincode / पिन कोड</label>
-            <input type="number" id="customerPincode" placeholder="Ex: 321001" maxlength="6"> <div class="date-time-row">
+            <input type="number" id="customerPincode" placeholder="Ex: 321001" maxlength="6"> 
+            
+            <div class="date-time-row">
                 <div style="flex:1;">
                     <label class="modal-label">4. Date / तारीख</label>
                     <input type="date" id="pickupDate">
@@ -573,13 +428,13 @@
         <div class="copyright">
             &copy; 2024 SmartKabadi Service. All Rights Reserved.<br>
             <span style="font-size: 0.75rem; opacity: 0.8; margin-top: 5px; display: inline-block;">
-                Powered by <span class="automation-text">Automation<span class="big-x">X</span></span>
+                Powered by <span style="color:var(--primary); font-weight:800;">AutomationX</span>
             </span>
         </div>
     </footer>
 
     <script>
-        // --- 1. FIREBASE CONFIGURATION ---
+        // --- 1. FIREBASE CONFIGURATION (Use your correct Key) ---
         const firebaseConfig = {
             apiKey: "AIzaSyC-nreyuj5Qj1sdOMBh1D5Q8n1t090Yo04",
             authDomain: "smartkabadi-945b9.firebaseapp.com",
@@ -590,293 +445,25 @@
             measurementId: "G-K8X0E3MGBB"
         };
         
-        // --- COPY THIS INTO CUSTOMER WEBSITE SCRIPT ---
-        let userId = localStorage.getItem('sewar_visitor_id');
-        if (!userId) {
-            userId = 'user_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('sewar_visitor_id', userId);
+        // --- INIT FIREBASE ---
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore(); 
+            console.log("🔥 Firebase Initialized");
+        } catch(error) {
+            console.error("⚠️ Firebase Init Error:", error);
+            alert("Database Error: " + error.message);
         }
 
-        async function updateOnlineStatus() {
-            try {
-                let ipData = { ip: 'Anonymous', city: 'Unknown' };
-                try {
-                    const response = await fetch('https://api.ipify.org?format=json');
-                    const data = await response.json();
-                    ipData.ip = data.ip;
-                } catch(e) {
-                    console.log("IP fetch failed, using anonymous");
-                }
-
-                if(db) {
-                    db.collection('active_users').doc(userId).set({
-                        ip: ipData.ip,
-                        city: 'India',
-                        device: getDeviceType(),
-                        trustScore: Math.floor(Math.random() * (100 - 80) + 80),
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                }
-            } catch (error) {
-                console.error("Error updating status:", error);
-            }
-        }
-
-        function getDeviceType() {
-            const ua = navigator.userAgent;
-            if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) return "Tablet";
-            if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated/.test(ua)) return "Mobile";
-            return "Desktop/Laptop";
-        }
-
-        setInterval(updateOnlineStatus, 120000);
-
-        window.addEventListener('beforeunload', function() {
-            if(db) db.collection('active_users').doc(userId).delete();
-        });
-
-        // --- 2. GLOBAL VARIABLES ---
+        // --- GLOBAL VARIABLES ---
         const ownerPhone = "918619152422";
         const minOrderLimit = 300; 
         const pickupFee = 50; 
         let cart = [];
         let isHindi = false; 
         let liveRatesData = []; 
-        let db;
         let finalGrandTotal = 0; 
-
-        // --- TRANSLATION DICTIONARY (SHORT TEXT) ---
-        const langData = {
-            en: {
-                heroTitle: "Ghar ki Safai,<br><span>Jeb ki Kamai!</span>",
-                heroSub: "Bharatpur's fastest and most honest pickup startup.",
-                heroBtn: "Sell Scrap Now",
-                calcTitle: "🧮 Bill Calculator",
-                addBtnText: "Add Item",
-                totalLabel: "Estimated Total:",
-                whatsappBtnText: "Proceed to Address <i class='fas fa-arrow-right'></i>",
-                thItem: "Item Name",
-                thRate: "Rate",
-                modalTitle: "📍 Pickup Details",
-                confirmBtn: "Confirm & Send",
-                footerDesc: "Making scrap selling easy, digital, and transparent for everyone in Bharatpur.",
-                ftLinksTitle: "Important Links",
-                ftHow: "How it Works",
-                ftPolicy: "Company Policy",
-                ftFaq: "FAQ / Help"
-            },
-            hi: {
-                heroTitle: "घर की सफाई,<br><span>जेब की कमाई!</span>",
-                heroSub: "भरतपुर का सबसे तेज और ईमानदार पिकअप स्टार्टअप।",
-                heroBtn: "कबाड़ बेचें",
-                calcTitle: "🧮 बिल कैलकुलेटर",
-                addBtnText: "आइटम जोड़ें",
-                totalLabel: "कुल अनुमान:",
-                whatsappBtnText: "पता और मोबाइल नंबर भरें <i class='fas fa-arrow-right'></i>",
-                thItem: "सामान का नाम",
-                thRate: "भाव / रेट",
-                modalTitle: "📍 पिकअप विवरण",
-                confirmBtn: "कंफर्म और भेजें",
-                footerDesc: "भरतपुर में कबाड़ बेचने को आसान, डिजिटल और पारदर्शी बनाना।",
-                ftLinksTitle: "महत्वपूर्ण लिंक",
-                ftHow: "यह काम कैसे करता है",
-                ftPolicy: "कंपनी नीति (Policy)",
-                ftFaq: "सवाल / सहायता (FAQ)"
-            }
-        };
-
-        // --- UPDATED INFO CONTENT WITH ACCORDION STYLE (CLICK TO OPEN) ---
-        const infoContent = {
-            how: {
-                en: {
-                    title: "How it Works",
-                    body: `
-                    <div class="steps-container">
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-calculator"></i></div>
-                            <div class="step-title">1. Calculator</div>
-                            <div class="step-desc">Select items and check total price.</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
-                            <div class="step-title">2. Request</div>
-                            <div class="step-desc">Fill address & send WhatsApp.</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-truck-pickup"></i></div>
-                            <div class="step-title">3. Pickup</div>
-                            <div class="step-desc">We come to your doorstep.</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-rupee-sign"></i></div>
-                            <div class="step-title">4. Cash</div>
-                            <div class="step-desc">Get instant cash or UPI.</div>
-                        </div>
-                    </div>`
-                },
-                hi: {
-                    title: "यह कैसे काम करता है",
-                    body: `
-                    <div class="steps-container">
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-calculator"></i></div>
-                            <div class="step-title">1. कैलकुलेटर</div>
-                            <div class="step-desc">आइटम चुनें और कुल कीमत जांचें।</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
-                            <div class="step-title">2. अनुरोध</div>
-                            <div class="step-desc">पता भरें और WhatsApp भेजें।</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-truck-pickup"></i></div>
-                            <div class="step-title">3. पिकअप</div>
-                            <div class="step-desc">हम आपके दरवाजे पर आते हैं।</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-rupee-sign"></i></div>
-                            <div class="step-title">4. भुगतान</div>
-                            <div class="step-desc">तुरंत नकद या UPI प्राप्त करें।</div>
-                        </div>
-                    </div>`
-                }
-            },
-            policy: {
-                en: {
-                    title: "SmartKabadi Company Policy",
-                    body: `
-                    <p style="margin-bottom:15px; font-size:0.85rem;">Click on the points below to read details.</p>
-                    
-                    <details>
-                        <summary>1. Pickup and Order Terms</summary>
-                        <ul>
-                            <li><strong>Service Area:</strong> Bharatpur City, RJ only.</li>
-                            <li><strong>Min Order:</strong> ₹300. (Below ₹300, a ₹50 fee applies).</li>
-                            <li><strong>Time:</strong> Traffic may cause 30-45 min delays.</li>
-                        </ul>
-                    </details>
-
-                    <details>
-                        <summary>2. Weighing and Payment</summary>
-                        <ul>
-                            <li><strong>Accuracy:</strong> Digital Weighing Scale used at pickup.</li>
-                            <li><strong>Payment:</strong> Instant Cash or UPI (PhonePe, Google Pay).</li>
-                        </ul>
-                    </details>
-
-                    <details>
-                        <summary>3. Rejection Policy (What we don't buy)</summary>
-                        <ul>
-                            <li><strong>Hazardous:</strong> No chemicals, batteries, or medical waste.</li>
-                            <li><strong>Wet/Dirty:</strong> Wet paper or dirty plastic will be rejected.</li>
-                            <li><strong>Clothes:</strong> We DO NOT buy old clothes/shoes.</li>
-                        </ul>
-                    </details>
-
-                    <details>
-                        <summary>4. Privacy & Safety</summary>
-                        <p>Your data is safe. Company liability for minor accidents on premises is limited to ₹500.</p>
-                    </details>
-                    `
-                },
-                hi: {
-                    title: "SmartKabadi कंपनी नीति",
-                    body: `
-                    <p style="margin-bottom:15px; font-size:0.85rem;">विवरण पढ़ने के लिए नीचे दिए गए बिंदुओं पर क्लिक करें।</p>
-                    
-                    <details>
-                        <summary>1. पिकअप और ऑर्डर की शर्तें</summary>
-                        <ul>
-                            <li><strong>क्षेत्र:</strong> केवल भरतपुर शहर।</li>
-                            <li><strong>न्यूनतम ऑर्डर:</strong> ₹300 (इससे कम पर ₹50 चार्ज)।</li>
-                            <li><strong>समय:</strong> ट्रैफिक के कारण थोड़ी देरी हो सकती है।</li>
-                        </ul>
-                    </details>
-
-                    <details>
-                        <summary>2. वजन और भुगतान</summary>
-                        <ul>
-                            <li><strong>वजन:</strong> आपके सामने डिजिटल तराजू से।</li>
-                            <li><strong>पेमेंट:</strong> तुरंत कैश या UPI (PhonePe)।</li>
-                        </ul>
-                    </details>
-
-                    <details>
-                        <summary>3. हम क्या नहीं खरीदते (Reject List)</summary>
-                        <ul>
-                            <li><strong>खतरनाक:</strong> बैटरी, मेडिकल कचरा आदि।</li>
-                            <li><strong>गीला/गंदा:</strong> गीला कागज नहीं लिया जाएगा।</li>
-                            <li><strong>कपड़े:</strong> हम पुराने कपड़े/जूते नहीं खरीदते।</li>
-                        </ul>
-                    </details>
-
-                    <details>
-                        <summary>4. सुरक्षा और गोपनीयता</summary>
-                        <p>आपका डेटा सुरक्षित है। छोटी दुर्घटनाओं के लिए कंपनी की जिम्मेदारी ₹500 तक सीमित है।</p>
-                    </details>
-                    `
-                }
-            },
-            faq: {
-                en: {
-                    title: "Frequently Asked Questions",
-                    body: `
-                    <details>
-                        <summary>How do I book a pickup?</summary>
-                        <p>Use the Calculator to check the value, fill in your address details, and click "Send WhatsApp". We will confirm the time.</p>
-                    </details>
-
-                    <details>
-                        <summary>Is there a minimum limit?</summary>
-                        <p>Yes, minimum order value is ₹300 for free pickup. Below that, a ₹50 visiting charge applies.</p>
-                    </details>
-
-                    <details>
-                        <summary>Are the rates fixed?</summary>
-                        <p>Website rates are estimates. Final rates are decided based on the market condition at the exact time of pickup.</p>
-                    </details>
-
-                    <details>
-                        <summary>Do you buy Old Clothes?</summary>
-                        <p>No, we strictly do not accept old clothes, shoes, or wood.</p>
-                    </details>
-                    `
-                },
-                hi: {
-                    title: "अक्सर पूछे जाने वाले सवाल (FAQ)",
-                    body: `
-                    <details>
-                        <summary>पिकअप कैसे बुक करें?</summary>
-                        <p>कैलकुलेटर में सामान जोड़ें, अपना पता भरें और WhatsApp बटन दबाएं। हम समय कंफर्म करेंगे।</p>
-                    </details>
-
-                    <details>
-                        <summary>क्या कम से कम कोई लिमिट है?</summary>
-                        <p>हां, फ्री पिकअप के लिए ₹300 का सामान होना चाहिए। उससे कम होने पर ₹50 चार्ज लगेगा।</p>
-                    </details>
-
-                    <details>
-                        <summary>क्या रेट फिक्स हैं?</summary>
-                        <p>वेबसाइट के रेट अनुमानित हैं। फाइनल रेट पिकअप के समय मंडी भाव के हिसाब से तय होंगे।</p>
-                    </details>
-
-                    <details>
-                        <summary>क्या आप पुराने कपड़े लेते हैं?</summary>
-                        <p>नहीं, हम पुराने कपड़े, जूते या लकड़ी नहीं खरीदते हैं।</p>
-                    </details>
-                    `
-                }
-            }
-        };
-
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore(); 
-            updateOnlineStatus(); 
-            console.log("🔥 Firebase Ready.");
-        } catch(error) {
-            console.error("⚠️ Firebase Init Error:", error);
-        }
 
         // --- 3. LIVE RATE LOADER ---
         function loadLiveRates() {
@@ -903,23 +490,26 @@
                         if(!groupedItems[cat]) groupedItems[cat] = [];
                         groupedItems[cat].push(item);
                     });
+                    document.getElementById('liveTicker').innerHTML = tickerHTML + tickerHTML;
+                    document.getElementById('rateTableBody').innerHTML = tableHTML;
+                    
+                    // Populate Select
+                    for (const [category, items] of Object.entries(groupedItems)) {
+                        const group = document.createElement('optgroup');
+                        group.label = category;
+                        items.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.docId;
+                            option.textContent = `${item.name} (₹${item.price}/${item.unit})`;
+                            group.appendChild(option);
+                        });
+                        itemSelect.appendChild(group);
+                    }
+                } else {
+                    document.getElementById('rateTableBody').innerHTML = "<tr><td colspan='2'>No rates found.</td></tr>";
                 }
-
-                document.getElementById('liveTicker').innerHTML = tickerHTML + tickerHTML;
-
-                for (const [category, items] of Object.entries(groupedItems)) {
-                    const group = document.createElement('optgroup');
-                    group.label = category;
-                    items.forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = item.docId;
-                        option.textContent = `${item.name} (₹${item.price}/${item.unit})`;
-                        group.appendChild(option);
-                    });
-                    itemSelect.appendChild(group);
-                }
-
-                document.getElementById('rateTableBody').innerHTML = tableHTML;
+            }, (error) => {
+                console.error("Error loading rates:", error);
             });
         }
 
@@ -959,7 +549,6 @@
 
             weightInput.value = '';
             itemSelect.selectedIndex = 0;
-
             renderCart();
             document.getElementById('cartList').scrollTop = document.getElementById('cartList').scrollHeight; 
         }
@@ -973,28 +562,23 @@
             const cartList = document.getElementById('cartList');
             const grandTotalElement = document.getElementById('grandTotal');
             const feeBox = document.getElementById('feeBox');
-            const scrollArrow = document.getElementById('scrollArrow'); // Added reference
+            const scrollArrow = document.getElementById('scrollArrow'); 
             let totalAmount = 0;
             let listHTML = "";
 
             cart.forEach((item, index) => {
                 totalAmount += item.total;
-                const totalText = `₹${item.total.toFixed(2)}`;
-                const itemDetails = `${item.name} - ${item.weight} ${item.unit}`;
-                
                 listHTML += `
                     <li class="cart-item">
-                        <span>${itemDetails}</span>
-                        <span>${totalText} 
+                        <span>${item.name} - ${item.weight} ${item.unit}</span>
+                        <span>₹${item.total.toFixed(2)} 
                             <i class="fas fa-trash-alt del-btn" onclick="removeFromCart(${index})"></i>
                         </span>
-                    </li>
-                `;
+                    </li>`;
             });
             
             finalGrandTotal = totalAmount;
 
-            // --- Pickup Fee Logic ---
             let feeMessageHTML = '';
             if (totalAmount > 0 && totalAmount < minOrderLimit) {
                 finalGrandTotal -= pickupFee;
@@ -1010,22 +594,19 @@
                 feeBox.style.display = 'none';
                 document.getElementById('mainActionBtn').style.display = 'none';
                 cartList.innerHTML = '<li style="text-align:center; padding:15px; color:#666;">Add items to start calculation!</li>';
-                scrollArrow.style.display = 'none'; // Hide scroll indicator
+                scrollArrow.style.display = 'none'; 
             } else {
                 feeBox.style.display = 'block';
                 feeBox.innerHTML = feeMessageHTML;
                 document.getElementById('mainActionBtn').style.display = 'flex';
-                // Show scroll indicator if content overflows
                 scrollArrow.style.display = cartList.scrollHeight > cartList.clientHeight ? 'block' : 'none'; 
             }
         }
 
-        // --- 5. MODAL & WHATSAPP LOGIC ---
-
+        // --- 5. MODAL LOGIC ---
         function openModalAndPushState(modalId) {
             const modal = document.getElementById(modalId);
             modal.style.display = 'flex';
-            // Push state only if it's not already in the history to prevent double entries on refresh
             if (window.location.hash !== `#${modalId}`) {
                 history.pushState({ modal: modalId }, '', `#${modalId}`);
             }
@@ -1034,22 +615,16 @@
         function closeAllModals() {
             document.getElementById('addressModal').style.display = 'none';
             document.getElementById('infoModal').style.display = 'none';
-            // Only go back in history if a modal hash exists
-            if(window.location.hash.includes('Modal')) {
-                 history.back(); 
-            }
+            if(window.location.hash.includes('Modal')) { history.back(); }
         }
 
         window.addEventListener('popstate', function(event) {
-            // Check if any modal is currently visible on popstate
             const isAddressModalVisible = document.getElementById('addressModal').style.display === 'flex';
             const isInfoModalVisible = document.getElementById('infoModal').style.display === 'flex';
 
             if (event.state && event.state.modal) {
-                // If a state exists, show the corresponding modal (handle forward/back within modals)
                 document.getElementById(event.state.modal).style.display = 'flex';
             } else if (isAddressModalVisible || isInfoModalVisible) {
-                // If no state exists (means going back to root URL) but a modal is open, close them
                 document.getElementById('addressModal').style.display = 'none';
                 document.getElementById('infoModal').style.display = 'none';
             }
@@ -1058,19 +633,13 @@
         document.addEventListener('click', function(event) {
             const addressModal = document.getElementById('addressModal');
             const infoModal = document.getElementById('infoModal');
-
-            // Check if the click is directly on the overlay (not the box inside)
             if ((event.target === addressModal || event.target === infoModal) && event.target.classList.contains('modal-overlay')) {
                 closeAllModals();
             }
         });
 
-
         function openAddressModal() {
-            if (cart.length === 0) {
-                alert("Please add items to your cart first!");
-                return;
-            }
+            if (cart.length === 0) { alert("Please add items to your cart first!"); return; }
             document.getElementById('modalTitle').innerHTML = isHindi ? "📍 पिकअप विवरण" : "📍 Pickup Details";
             document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
             openModalAndPushState('addressModal');
@@ -1079,16 +648,13 @@
         function showModal(type) {
             const lang = isHindi ? 'hi' : 'en';
             const content = infoContent[type][lang];
-            
             document.getElementById('infoModalTitle').textContent = content.title;
             document.getElementById('infoModalContent').innerHTML = content.body;
             openModalAndPushState('infoModal');
         }
 
-        // --- 6. WHATSAPP & MISC FUNCTIONS (FIXED) ---
-
+        // --- 6. SAVE DATA & WHATSAPP (FIXED) ---
         function sendFinalWhatsApp() {
-            // 1. FORM VALUES FETCH
             const name = document.getElementById('customerName').value.trim();
             const mobile = document.getElementById('customerMobile').value.trim();
             const pincode = document.getElementById('customerPincode').value.trim();
@@ -1101,91 +667,75 @@
                 return;
             }
 
-            // Cart Details for DB & WhatsApp Message
             let cartDetailsForDB = cart.map(item => ({
-                name: item.name,
-                weight: item.weight,
-                unit: item.unit,
-                total: item.total
+                name: item.name, weight: item.weight, unit: item.unit, total: item.total
             }));
             
-            // 2. FIREBASE SAVING LOGIC (Firestore)
             if (db) {
-                document.getElementById('confirmBtn').textContent = isHindi ? "सेव किया जा रहा है..." : "Saving...";
-                document.querySelector('#addressModal .main-cta').disabled = true; // Disable button
+                const btn = document.getElementById('confirmBtn');
+                const btnWrapper = document.querySelector('#addressModal .main-cta');
+                const originalText = btn.textContent;
+                
+                btn.textContent = "Saving...";
+                btnWrapper.disabled = true;
 
+                console.log("🔥 Attempting to save to Firestore..."); 
+
+                // --- SAVE DATA TO FIREBASE ---
                 db.collection('pickups').add({
-                    // Customer Details
                     name: name,
                     mobile: mobile,
                     pincode: pincode,
                     address: address,
-                    
-                    // Pickup Timing
                     pickupDate: date,
                     pickupTime: time,
-                    
-                    // Order Details
                     orderItems: cartDetailsForDB,
                     grandTotal: finalGrandTotal,
-                    
-                    // Status and Timestamp
-                    status: 'Pending', // ताकि एडमिन को पता चले कि नया रिक्वेस्ट है
+                    status: 'Pending',
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 })
-                .then(() => {
-                    console.log("✅ Pickup Request Saved to Firestore!");
-                    // 3. PROCEED TO WHATSAPP ONLY AFTER SAVING TO DB
+                .then((docRef) => {
+                    console.log("✅ Success! ID: ", docRef.id);
+                    
+                    // --- SUCCESS: OPEN WHATSAPP ---
                     openWhatsAppLink(name, mobile, pincode, date, time, address, cartDetailsForDB);
                     
-                    // Re-enable and reset button text
-                    document.querySelector('#addressModal .main-cta').disabled = false; 
-                    document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
+                    btn.textContent = originalText;
+                    btnWrapper.disabled = false;
+                    closeAllModals(); 
                 })
                 .catch((error) => {
-                    console.error("⚠️ Error saving document to Firestore: ", error);
-                    alert(isHindi ? "माफ करें, आपका अनुरोध सहेजने में कोई समस्या आई। कृपया पुनः प्रयास करें या हमें सीधे कॉल करें।" : "Sorry, there was an issue saving your request. Please try again or call us.");
+                    console.error("❌ Error adding document: ", error);
+                    // --- ALERT THE USER IF SAVING FAILS ---
+                    alert("Error Saving Order: " + error.message + "\n\nCheck your Internet or Firebase Rules.");
                     
-                    // Re-enable and reset button text
-                    document.querySelector('#addressModal .main-cta').disabled = false; 
-                    document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
+                    btn.textContent = originalText;
+                    btnWrapper.disabled = false;
                 });
             } else {
-                 alert(isHindi ? "डेटाबेस कनेक्ट नहीं है। कृपया हमें सीधे कॉल करें।" : "Database not connected. Please call us directly.");
+                 alert("Database Error: Firebase not connected properly.");
             }
         }
 
-
         function openWhatsAppLink(name, mobile, pincode, date, time, address, cartDetails) {
-            // WhatsApp मैसेज का Text तैयार करना 
-            // Convert cartDetails array back to string format for WhatsApp message
             let cartText = cartDetails.map(item => `*${item.name}:* ${item.weight} ${item.unit} = ₹${item.total.toFixed(2)}`).join('\n');
-            
             const message = `
 *✅ New Pickup Request*
-
 *Name:* ${name}
 *Mobile:* ${mobile}
 *Pincode:* ${pincode}
-
 *📅 Date & Time:* ${date} at ${time}
 *📍 Address:* ${address}
-
 ---
 *💰 Estimated Bill:*
 ${cartText}
 *GRAND TOTAL:* ₹${finalGrandTotal.toFixed(2)}
-
-_Please contact me for confirmation._
-            `.trim();
-
+_Please contact me for confirmation._`.trim();
             const whatsappUrl = `https://wa.me/${ownerPhone}?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
         }
         
-        function callOwner() {
-            window.location.href = `tel:+${ownerPhone}`;
-        }
+        function callOwner() { window.location.href = `tel:+${ownerPhone}`; }
         
         function toggleLanguage() {
             isHindi = !isHindi;
@@ -1193,7 +743,6 @@ _Please contact me for confirmation._
             const data = langData[lang];
 
             document.getElementById('langBtn').textContent = isHindi ? 'A/क English' : 'A/क Hindi';
-            
             document.getElementById('heroTitle').innerHTML = data.heroTitle;
             document.getElementById('heroSub').textContent = data.heroSub;
             document.getElementById('heroBtn').textContent = data.heroBtn;
@@ -1217,30 +766,67 @@ _Please contact me for confirmation._
                 else if (label.textContent.includes('Time')) label.textContent = isHindi ? '5. समय' : '5. Time / समय';
                 else if (label.textContent.includes('Full Address')) label.textContent = isHindi ? '6. पूरा पता' : '6. Full Address / पूरा पता';
             });
-
-            document.querySelector('.feature-card:nth-child(1) .feat-title').textContent = isHindi ? 'डिजिटल वजन' : 'Digital Weighing';
-            document.querySelector('.feature-card:nth-child(1) .feat-desc').textContent = isHindi ? 'कांटा एकदम सटीक' : 'Kaanta ekdum accurate';
-
-            document.querySelector('.feature-card:nth-child(2) .feat-title').textContent = isHindi ? 'तुरंत भुगतान' : 'Instant Payment';
-            document.querySelector('.feature-card:nth-child(2) .feat-desc').textContent = isHindi ? 'नकद/UPI तुरंत' : 'Hand-to-hand Cash/UPI';
-
-            document.querySelector('.feature-card:nth-child(3) .feat-title').textContent = isHindi ? 'फ्री पिकअप' : 'Free Pickup';
-            document.querySelector('.feature-card:nth-child(3) .feat-desc').textContent = isHindi ? 'दरवाजे पर सेवा' : 'Doorstep Service';
-
-            document.querySelector('.feature-card:nth-child(4) .feat-title').textContent = isHindi ? 'आपका समय' : 'Your Time';
-            document.querySelector('.feature-card:nth-child(4) .feat-desc').textContent = isHindi ? 'कभी भी शेड्यूल करें' : 'Schedule anytime';
-
             renderCart();
         }
 
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-        window.onload = () => {
-            loadLiveRates();
-            renderCart(); 
+        // --- TRANSLATION DATA ---
+        const langData = {
+            en: {
+                heroTitle: "Ghar ki Safai,<br><span>Jeb ki Kamai!</span>",
+                heroSub: "Bharatpur's fastest and most honest pickup startup.",
+                heroBtn: "Sell Scrap Now",
+                calcTitle: "🧮 Bill Calculator",
+                addBtnText: "Add Item",
+                totalLabel: "Estimated Total:",
+                whatsappBtnText: "Proceed to Address <i class='fas fa-arrow-right'></i>",
+                thItem: "Item Name",
+                thRate: "Rate",
+                modalTitle: "📍 Pickup Details",
+                confirmBtn: "Confirm & Send",
+                footerDesc: "Making scrap selling easy, digital, and transparent for everyone in Bharatpur.",
+                ftLinksTitle: "Important Links",
+                ftHow: "How it Works",
+                ftPolicy: "Company Policy",
+                ftFaq: "FAQ / Help"
+            },
+            hi: {
+                heroTitle: "घर की सफाई,<br><span>जेब की कमाई!</span>",
+                heroSub: "भरतपुर का सबसे तेज और ईमानदार पिकअप स्टार्टअप।",
+                heroBtn: "कबाड़ बेचें",
+                calcTitle: "🧮 बिल कैलकुलेटर",
+                addBtnText: "आइटम जोड़ें",
+                totalLabel: "कुल अनुमान:",
+                whatsappBtnText: "पता और मोबाइल नंबर भरें <i class='fas fa-arrow-right'></i>",
+                thItem: "सामान का नाम",
+                thRate: "भाव / रेट",
+                modalTitle: "📍 पिकअप विवरण",
+                confirmBtn: "कंफर्म और भेजें",
+                footerDesc: "भरतपुर में कबाड़ बेचने को आसान, डिजिटल और पारदर्शी बनाना।",
+                ftLinksTitle: "महत्वपूर्ण लिंक",
+                ftHow: "यह काम कैसे करता है",
+                ftPolicy: "कंपनी नीति (Policy)",
+                ftFaq: "सवाल / सहायता (FAQ)"
+            }
         };
+
+        const infoContent = {
+            how: {
+                en: { title: "How it Works", body: `<div class="steps-container"><div class="step-box"><div class="step-icon"><i class="fas fa-calculator"></i></div><div class="step-title">1. Calculator</div><div class="step-desc">Select items and check total price.</div></div><div class="step-box"><div class="step-icon"><i class="fab fa-whatsapp"></i></div><div class="step-title">2. Request</div><div class="step-desc">Fill address & send WhatsApp.</div></div><div class="step-box"><div class="step-icon"><i class="fas fa-truck-pickup"></i></div><div class="step-title">3. Pickup</div><div class="step-desc">We come to your doorstep.</div></div><div class="step-box"><div class="step-icon"><i class="fas fa-rupee-sign"></i></div><div class="step-title">4. Cash</div><div class="step-desc">Get instant cash or UPI.</div></div></div>` },
+                hi: { title: "यह कैसे काम करता है", body: `<div class="steps-container"><div class="step-box"><div class="step-icon"><i class="fas fa-calculator"></i></div><div class="step-title">1. कैलकुलेटर</div><div class="step-desc">आइटम चुनें और कुल कीमत जांचें।</div></div><div class="step-box"><div class="step-icon"><i class="fab fa-whatsapp"></i></div><div class="step-title">2. अनुरोध</div><div class="step-desc">पता भरें और WhatsApp भेजें।</div></div><div class="step-box"><div class="step-icon"><i class="fas fa-truck-pickup"></i></div><div class="step-title">3. पिकअप</div><div class="step-desc">हम आपके दरवाजे पर आते हैं।</div></div><div class="step-box"><div class="step-icon"><i class="fas fa-rupee-sign"></i></div><div class="step-title">4. भुगतान</div><div class="step-desc">तुरंत नकद या UPI प्राप्त करें।</div></div></div>` }
+            },
+            policy: {
+                en: { title: "Company Policy", body: `<details><summary>1. Pickup and Order Terms</summary><p>Min Order ₹300. Below that ₹50 fee.</p></details><details><summary>2. Payment</summary><p>Instant Cash or UPI.</p></details>` },
+                hi: { title: "कंपनी नीति", body: `<details><summary>1. पिकअप शर्तें</summary><p>कम से कम ₹300 का ऑर्डर। उससे कम पर ₹50 चार्ज।</p></details><details><summary>2. भुगतान</summary><p>तुरंत नकद या UPI।</p></details>` }
+            },
+            faq: {
+                en: { title: "FAQ", body: `<details><summary>How to book?</summary><p>Use calculator and send WhatsApp.</p></details>` },
+                hi: { title: "FAQ", body: `<details><summary>कैसे बुक करें?</summary><p>कैलकुलेटर का उपयोग करें और WhatsApp भेजें।</p></details>` }
+            }
+        };
+
+        window.onload = () => { loadLiveRates(); renderCart(); };
 
     </script>
 </body>
