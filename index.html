@@ -990,6 +990,21 @@ if ("serviceWorker" in navigator) {
             .catch(err => console.log("❌ App Failed", err));
     });
 }
+// --- APP INSTALL TRACKER ---
+window.addEventListener('appinstalled', (evt) => {
+    console.log('✅ App Installed by User');
+    
+    // Firebase mein count save karein
+    if(db) {
+        db.collection('app_downloads').add({
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            userAgent: navigator.userAgent, // Device ki details
+            status: 'Installed'
+        }).then(() => {
+            console.log("Install Counted in Database");
+        });
+    }
+});
     </script>
 </body>
 </html>
