@@ -345,7 +345,9 @@
             <input type="tel" id="customerMobile" placeholder="Ex: 9876543210" maxlength="10">
 
             <label class="modal-label">3. Pincode / पिन कोड</label>
-            <input type="number" id="customerPincode" placeholder="Ex: 321001" maxlength="6"> <div class="date-time-row">
+            <input type="number" id="customerPincode" placeholder="Ex: 321001" maxlength="6"> 
+            
+            <div class="date-time-row">
                 <div style="flex:1;">
                     <label class="modal-label">4. Date / तारीख</label>
                     <input type="date" id="pickupDate">
@@ -538,26 +540,8 @@
             console.log("🔥 Firebase Initialized Successfully.");
         } catch(error) {
             console.error("⚠️ Firebase Init Error:", error);
+            alert("Firebase Error: " + error.message);
         }
-
-        // --- VISITOR TRACKING (EXISTING FEATURE) ---
-        let userId = localStorage.getItem('sewar_visitor_id');
-        if (!userId) {
-            userId = 'user_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('sewar_visitor_id', userId);
-        }
-
-        async function updateOnlineStatus() {
-            try {
-                if(db) {
-                    db.collection('active_users').doc(userId).set({
-                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                        active: true
-                    }, { merge: true });
-                }
-            } catch (error) { console.error(error); }
-        }
-        setInterval(updateOnlineStatus, 60000);
 
         // --- 2. GLOBAL VARIABLES ---
         const ownerPhone = "918619152422";
@@ -567,156 +551,6 @@
         let isHindi = false; 
         let liveRatesData = []; 
         let finalGrandTotal = 0; 
-
-        // --- TRANSLATION DICTIONARY ---
-        const langData = {
-            en: {
-                heroTitle: "Ghar ki Safai,<br><span>Jeb ki Kamai!</span>",
-                heroSub: "Bharatpur's fastest and most honest pickup startup.",
-                heroBtn: "Sell Scrap Now",
-                calcTitle: "🧮 Bill Calculator",
-                addBtnText: "Add Item",
-                totalLabel: "Estimated Total:",
-                whatsappBtnText: "Proceed to Address <i class='fas fa-arrow-right'></i>",
-                thItem: "Item Name",
-                thRate: "Rate",
-                modalTitle: "📍 Pickup Details",
-                confirmBtn: "Confirm & Send",
-                footerDesc: "Making scrap selling easy, digital, and transparent for everyone in Bharatpur.",
-                ftLinksTitle: "Important Links",
-                ftHow: "How it Works",
-                ftPolicy: "Company Policy",
-                ftFaq: "FAQ / Help"
-            },
-            hi: {
-                heroTitle: "घर की सफाई,<br><span>जेब की कमाई!</span>",
-                heroSub: "भरतपुर का सबसे तेज और ईमानदार पिकअप स्टार्टअप।",
-                heroBtn: "कबाड़ बेचें",
-                calcTitle: "🧮 बिल कैलकुलेटर",
-                addBtnText: "आइटम जोड़ें",
-                totalLabel: "कुल अनुमान:",
-                whatsappBtnText: "पता और मोबाइल नंबर भरें <i class='fas fa-arrow-right'></i>",
-                thItem: "सामान का नाम",
-                thRate: "भाव / रेट",
-                modalTitle: "📍 पिकअप विवरण",
-                confirmBtn: "कंफर्म और भेजें",
-                footerDesc: "भरतपुर में कबाड़ बेचने को आसान, डिजिटल और पारदर्शी बनाना।",
-                ftLinksTitle: "महत्वपूर्ण लिंक",
-                ftHow: "यह काम कैसे करता है",
-                ftPolicy: "कंपनी नीति (Policy)",
-                ftFaq: "सवाल / सहायता (FAQ)"
-            }
-        };
-
-        // --- INFO CONTENT ---
-        const infoContent = {
-            how: {
-                en: {
-                    title: "How it Works",
-                    body: `
-                    <div class="steps-container">
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-calculator"></i></div>
-                            <div class="step-title">1. Calculator</div>
-                            <div class="step-desc">Select items and check total price.</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
-                            <div class="step-title">2. Request</div>
-                            <div class="step-desc">Fill address & send WhatsApp.</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-truck-pickup"></i></div>
-                            <div class="step-title">3. Pickup</div>
-                            <div class="step-desc">We come to your doorstep.</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-rupee-sign"></i></div>
-                            <div class="step-title">4. Cash</div>
-                            <div class="step-desc">Get instant cash or UPI.</div>
-                        </div>
-                    </div>`
-                },
-                hi: {
-                    title: "यह कैसे काम करता है",
-                    body: `
-                    <div class="steps-container">
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-calculator"></i></div>
-                            <div class="step-title">1. कैलकुलेटर</div>
-                            <div class="step-desc">आइटम चुनें और कुल कीमत जांचें।</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fab fa-whatsapp"></i></div>
-                            <div class="step-title">2. अनुरोध</div>
-                            <div class="step-desc">पता भरें और WhatsApp भेजें।</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-truck-pickup"></i></div>
-                            <div class="step-title">3. पिकअप</div>
-                            <div class="step-desc">हम आपके दरवाजे पर आते हैं।</div>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-icon"><i class="fas fa-rupee-sign"></i></div>
-                            <div class="step-title">4. भुगतान</div>
-                            <div class="step-desc">तुरंत नकद या UPI प्राप्त करें।</div>
-                        </div>
-                    </div>`
-                }
-            },
-            policy: {
-                en: {
-                    title: "SmartKabadi Company Policy",
-                    body: `
-                    <p style="margin-bottom:15px; font-size:0.85rem;">Click on the points below to read details.</p>
-                    <details>
-                        <summary>1. Pickup and Order Terms</summary>
-                        <ul>
-                            <li><strong>Service Area:</strong> Bharatpur City, RJ only.</li>
-                            <li><strong>Min Order:</strong> ₹300. (Below ₹300, a ₹50 fee applies).</li>
-                        </ul>
-                    </details>
-                    <details>
-                        <summary>2. Rejection Policy (What we don't buy)</summary>
-                        <ul>
-                            <li><strong>Hazardous:</strong> No chemicals, batteries, or medical waste.</li>
-                            <li><strong>Wet/Dirty:</strong> Wet paper or dirty plastic will be rejected.</li>
-                            <li><strong>Clothes:</strong> We DO NOT buy old clothes/shoes.</li>
-                        </ul>
-                    </details>`
-                },
-                hi: {
-                    title: "SmartKabadi कंपनी नीति",
-                    body: `
-                    <p style="margin-bottom:15px; font-size:0.85rem;">विवरण पढ़ने के लिए नीचे दिए गए बिंदुओं पर क्लिक करें।</p>
-                    <details>
-                        <summary>1. पिकअप और ऑर्डर की शर्तें</summary>
-                        <ul>
-                            <li><strong>क्षेत्र:</strong> केवल भरतपुर शहर।</li>
-                            <li><strong>न्यूनतम ऑर्डर:</strong> ₹300 (इससे कम पर ₹50 चार्ज)।</li>
-                        </ul>
-                    </details>
-                    <details>
-                        <summary>2. हम क्या नहीं खरीदते (Reject List)</summary>
-                        <ul>
-                            <li><strong>खतरनाक:</strong> बैटरी, मेडिकल कचरा आदि।</li>
-                            <li><strong>गीला/गंदा:</strong> गीला कागज नहीं लिया जाएगा।</li>
-                            <li><strong>कपड़े:</strong> हम पुराने कपड़े/जूते नहीं खरीदते।</li>
-                        </ul>
-                    </details>`
-                }
-            },
-            faq: {
-                en: {
-                    title: "FAQ",
-                    body: `<details><summary>How do I book a pickup?</summary><p>Use the Calculator to check the value, fill in your address details, and click "Send WhatsApp".</p></details>`
-                },
-                hi: {
-                    title: "FAQ",
-                    body: `<details><summary>पिकअप कैसे बुक करें?</summary><p>कैलकुलेटर में सामान जोड़ें, अपना पता भरें और WhatsApp बटन दबाएं।</p></details>`
-                }
-            }
-        };
 
         // --- 3. LIVE RATE LOADER ---
         function loadLiveRates() {
@@ -772,14 +606,14 @@
             const weight = parseFloat(weightInput.value);
 
             if (!selectedDocId || isNaN(weight) || weight <= 0) {
-                alert("Please select an item and enter a valid weight/quantity.");
+                alert(isHindi ? "कृपया सही वजन डालें!" : "Please enter valid weight!");
                 return;
             }
 
             const itemRate = liveRatesData.find(item => item.docId === selectedDocId);
             if (!itemRate) return;
 
-            const total = itemRate.unit === 'pc' ? itemRate.price * weight : itemRate.price * weight;
+            const total = itemRate.price * weight;
             
             const existingItem = cart.find(item => item.docId === selectedDocId);
 
@@ -897,116 +731,102 @@
 
         function openAddressModal() {
             if (cart.length === 0) {
-                alert("Please add items to your cart first!");
+                alert(isHindi ? "पहले आइटम जोड़ें!" : "Please add items first!");
                 return;
             }
-            document.getElementById('modalTitle').innerHTML = isHindi ? "📍 पिकअप विवरण" : "📍 Pickup Details";
-            document.getElementById('confirmBtn').textContent = isHindi ? "कंफर्म और भेजें" : "Confirm & Send";
             openModalAndPushState('addressModal');
         }
 
-        function showModal(type) {
-            const lang = isHindi ? 'hi' : 'en';
-            const content = infoContent[type][lang];
-            
-            document.getElementById('infoModalTitle').textContent = content.title;
-            document.getElementById('infoModalContent').innerHTML = content.body;
-            openModalAndPushState('infoModal');
-        }
-
-        // --- 6. FIXED SEND LOGIC (USING NEW CODE LOGIC) ---
-        function sendFinalWhatsApp() {
-            // 1. Get Values
-            const name = document.getElementById('customerName').value.trim() || "Guest";
-            const mobile = document.getElementById('customerMobile').value;
-            const pincode = document.getElementById('customerPincode').value;
-            const date = document.getElementById('pickupDate').value;
-            const time = document.getElementById('pickupTime').value;
-            const address = document.getElementById('customerAddress').value;
-
-            // 2. Validation
-            if(!mobile || mobile.length < 10) {
-                alert(isHindi ? "कृपया सही मोबाइल नंबर लिखें" : "Please enter valid Mobile Number");
-                return;
-            }
-            if(!pincode || pincode.length < 6) {
-                alert(isHindi ? "कृपया सही पिन कोड लिखें" : "Please enter valid Pincode");
-                return;
-            }
-            if(!date || !time) {
-                alert(isHindi ? "कृपया तारीख और समय चुनें" : "Please select Date and Time");
-                return;
-            }
-            if(!address || address.length < 5) {
-                alert(isHindi ? "कृपया पूरा पता लिखें" : "Please enter full address");
-                return;
-            }
-
-            // 3. Create WhatsApp Message
-            let msg = `*New Pickup Request via SmartKabadi*\n\n`;
-            msg += `*Name:* ${name}\n`;
-            cart.forEach(i => {
-                msg += `📦 ${i.name}: ${i.weight}${i.unit} = ₹${i.total.toFixed(0)}\n`;
-            });
-            msg += `------------------\n`;
-            msg += `*Total Estimate: ₹${finalGrandTotal.toFixed(0)}*\n`;
-            msg += `📱 *Mobile:* ${mobile}\n`;
-            msg += `📮 *Pincode:* ${pincode}\n`;
-            msg += `📅 *Date:* ${date}\n`;
-            msg += `⏰ *Time:* ${time}\n`;
-            msg += `📍 *Address:* ${address}\n`;
-            msg += `Please confirm pickup time.`;
-
-            let url = `https://wa.me/${ownerPhone}?text=${encodeURIComponent(msg)}`;
-
-            // 4. Change Button State
+        // --- 6. CRITICAL FIX: SEND & SAVE LOGIC ---
+        async function sendFinalWhatsApp() {
             const btn = document.getElementById('confirmBtn');
             const originalText = btn.innerText;
-            btn.innerText = "Processing...";
             
-            // 5. SAVE TO FIREBASE (Logic from new code)
-            if(db) {
-                db.collection("pickup_requests").add({
+            try {
+                // 1. Get Values
+                const name = document.getElementById('customerName').value.trim() || "Guest User";
+                const mobile = document.getElementById('customerMobile').value.trim();
+                const pincode = document.getElementById('customerPincode').value.trim();
+                const date = document.getElementById('pickupDate').value;
+                const time = document.getElementById('pickupTime').value;
+                const address = document.getElementById('customerAddress').value.trim();
+
+                // 2. Validation
+                if(!mobile || mobile.length < 10) throw new Error(isHindi ? "मोबाइल नंबर गलत है" : "Invalid Mobile Number");
+                if(!pincode || pincode.length < 6) throw new Error(isHindi ? "पिन कोड गलत है" : "Invalid Pincode");
+                if(!date || !time) throw new Error(isHindi ? "तारीख और समय चुनें" : "Select Date & Time");
+                if(!address || address.length < 5) throw new Error(isHindi ? "पूरा पता लिखें" : "Enter Full Address");
+
+                // 3. Prepare Data for Firestore
+                const cleanCart = cart.map(i => ({
+                    name: i.name || "Unknown",
+                    weight: parseFloat(i.weight) || 0,
+                    unit: i.unit || "kg",
+                    total: parseFloat(i.total) || 0
+                }));
+
+                const pickupData = {
                     name: name,
                     phone: mobile,
                     pincode: pincode,
                     address: address,
                     pickup_date: date,
                     pickup_time: time,
-                    total_amount: finalGrandTotal,
-                    cart_items: cart,
+                    total_amount: parseFloat(finalGrandTotal) || 0,
+                    cart_items: cleanCart,
+                    status: "Pending",
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    // Success: Redirect to WhatsApp
-                    window.open(url, '_blank');
-                    closeAllModals();
-                    btn.innerText = originalText;
-                }).catch((error) => {
-                    console.error("Error saving document: ", error);
-                    // Fail Safe: Still Redirect to WhatsApp
-                    alert("Network Error, but opening WhatsApp...");
-                    window.open(url, '_blank');
-                    closeAllModals();
-                    btn.innerText = originalText;
-                });
-            } else {
-                // If DB not ready, just open WhatsApp
-                window.open(url, '_blank');
+                };
+
+                // 4. Update Button State
+                btn.innerText = "Saving...";
+                document.querySelector('#addressModal .main-cta').disabled = true;
+
+                // 5. ATTEMPT SAVE TO FIREBASE
+                if(db) {
+                    await db.collection("pickup_requests").add(pickupData);
+                    console.log("✅ Data Saved to pickup_requests");
+                } else {
+                    throw new Error("Database not connected");
+                }
+
+                // 6. OPEN WHATSAPP ONLY AFTER SAVE
+                let msg = `*New Pickup Request*\n\n*Name:* ${name}\n`;
+                cleanCart.forEach(i => { msg += `📦 ${i.name}: ${i.weight}${i.unit} = ₹${i.total.toFixed(0)}\n`; });
+                msg += `------------------\n*Total: ₹${finalGrandTotal.toFixed(0)}*\n`;
+                msg += `📱 ${mobile} | 📮 ${pincode}\n📅 ${date} | ⏰ ${time}\n📍 ${address}`;
+
+                window.open(`https://wa.me/${ownerPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+                
+                // 7. Cleanup
                 closeAllModals();
+                cart = []; renderCart(); // Clear Cart
+                document.getElementById('customerAddress').value = ""; // Clear Form
+
+            } catch (error) {
+                console.error(error);
+                // SHOW ALERT ON SCREEN
+                alert("⚠️ Error: " + error.message + "\n(Check Firebase Rules if permission denied)");
+                
+                // Fallback: Still open WhatsApp if DB failed
+                if(!error.message.includes("Invalid")) {
+                     let fallbackMsg = `*Pickup Request (DB Failed)*\nCheck details manually.`;
+                     window.open(`https://wa.me/${ownerPhone}?text=${encodeURIComponent(fallbackMsg)}`, '_blank');
+                }
+            } finally {
+                btn.innerText = originalText;
+                document.querySelector('#addressModal .main-cta').disabled = false;
             }
         }
         
-        function callOwner() {
-            window.location.href = `tel:+${ownerPhone}`;
-        }
+        function callOwner() { window.location.href = `tel:+${ownerPhone}`; }
         
+        // --- 7. TRANSLATION & UTILS ---
         function toggleLanguage() {
             isHindi = !isHindi;
-            const lang = isHindi ? 'hi' : 'en';
-            const data = langData[lang];
-
-            document.getElementById('langBtn').textContent = isHindi ? 'A/क English' : 'A/क Hindi';
+            const data = isHindi ? langData.hi : langData.en;
             
+            document.getElementById('langBtn').textContent = isHindi ? 'A/क English' : 'A/क Hindi';
             document.getElementById('heroTitle').innerHTML = data.heroTitle;
             document.getElementById('heroSub').textContent = data.heroSub;
             document.getElementById('heroBtn').textContent = data.heroBtn;
@@ -1017,33 +837,63 @@
             document.getElementById('thItem').textContent = data.thItem;
             document.getElementById('thRate').textContent = data.thRate;
             document.getElementById('footerDesc').textContent = data.footerDesc;
-            document.getElementById('ftLinksTitle').textContent = data.ftLinksTitle;
-            document.getElementById('ftHow').textContent = data.ftHow;
-            document.getElementById('ftPolicy').textContent = data.ftPolicy;
-            document.getElementById('ftFaq').textContent = data.ftFaq;
-            
+
             document.querySelectorAll('.modal-label').forEach(label => {
-                if (label.textContent.includes('Your Name')) label.textContent = isHindi ? '1. आपका नाम' : '1. Your Name / आपका नाम';
-                else if (label.textContent.includes('Mobile Number')) label.textContent = isHindi ? '2. मोबाइल' : '2. Mobile Number / मोबाइल';
+                if (label.textContent.includes('Name')) label.textContent = isHindi ? '1. आपका नाम' : '1. Your Name / आपका नाम';
+                else if (label.textContent.includes('Mobile')) label.textContent = isHindi ? '2. मोबाइल' : '2. Mobile Number / मोबाइल';
                 else if (label.textContent.includes('Pincode')) label.textContent = isHindi ? '3. पिन कोड' : '3. Pincode / पिन कोड';
                 else if (label.textContent.includes('Date')) label.textContent = isHindi ? '4. तारीख' : '4. Date / तारीख';
                 else if (label.textContent.includes('Time')) label.textContent = isHindi ? '5. समय' : '5. Time / समय';
-                else if (label.textContent.includes('Full Address')) label.textContent = isHindi ? '6. पूरा पता' : '6. Full Address / पूरा पता';
+                else if (label.textContent.includes('Address')) label.textContent = isHindi ? '6. पूरा पता' : '6. Full Address / पूरा पता';
             });
-
             renderCart();
         }
 
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        window.onload = () => {
-            loadLiveRates();
-            renderCart(); 
-            updateOnlineStatus();
+        const langData = {
+            en: {
+                heroTitle: "Ghar ki Safai,<br><span>Jeb ki Kamai!</span>",
+                heroSub: "Bharatpur's fastest and most honest pickup startup.",
+                heroBtn: "Sell Scrap Now",
+                calcTitle: "🧮 Bill Calculator",
+                addBtnText: "Add Item",
+                totalLabel: "Estimated Total:",
+                whatsappBtnText: "Proceed to Address <i class='fas fa-arrow-right'></i>",
+                thItem: "Item Name",
+                thRate: "Rate",
+                footerDesc: "Making scrap selling easy, digital, and transparent for everyone in Bharatpur.",
+                ftLinksTitle: "Important Links"
+            },
+            hi: {
+                heroTitle: "घर की सफाई,<br><span>जेब की कमाई!</span>",
+                heroSub: "भरतपुर का सबसे तेज और ईमानदार पिकअप स्टार्टअप।",
+                heroBtn: "कबाड़ बेचें",
+                calcTitle: "🧮 बिल कैलकुलेटर",
+                addBtnText: "आइटम जोड़ें",
+                totalLabel: "कुल अनुमान:",
+                whatsappBtnText: "पता और मोबाइल नंबर भरें <i class='fas fa-arrow-right'></i>",
+                thItem: "सामान का नाम",
+                thRate: "भाव / रेट",
+                footerDesc: "भरतपुर में कबाड़ बेचने को आसान, डिजिटल और पारदर्शी बनाना।",
+                ftLinksTitle: "महत्वपूर्ण लिंक"
+            }
         };
 
+        const infoContent = {
+            how: { en: { title: "How it Works", body: "1. Calculate 2. Request 3. Pickup 4. Cash" }, hi: { title: "कैसे काम करता है", body: "1. कैलकुलेट करें 2. अनुरोध भेजें 3. पिकअप 4. नकद" } },
+            policy: { en: { title: "Policy", body: "Min Order: ₹300. No wet waste." }, hi: { title: "नीति", body: "न्यूनतम ऑर्डर: ₹300. गीला कचरा नहीं।" } },
+            faq: { en: { title: "FAQ", body: "We pay instantly via Cash/UPI." }, hi: { title: "सवाल", body: "हम नकद/UPI से तुरंत भुगतान करते हैं।" } }
+        };
+
+        function showModal(type) {
+            const lang = isHindi ? 'hi' : 'en';
+            document.getElementById('infoModalTitle').textContent = infoContent[type][lang].title;
+            document.getElementById('infoModalContent').innerHTML = `<p>${infoContent[type][lang].body}</p>`;
+            openModalAndPushState('infoModal');
+        }
+
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+        window.onload = () => { loadLiveRates(); renderCart(); };
     </script>
 </body>
 </html>
