@@ -8,14 +8,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="format-detection" content="telephone=no">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1b5e20">
 
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics-compat.js"></script>
-
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1b5e20">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3176/3176363.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -41,6 +40,53 @@
             padding-bottom: 0px; 
         }
 
+        /* --- SPLASH SCREEN ANIMATION (PWA ONLY) --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+            /* DEFAULT: HIDDEN FOR NORMAL WEBSITE */
+            display: none; 
+        }
+
+        /* RULE: Show Splash ONLY when installed as App (Standalone Mode) */
+        @media all and (display-mode: standalone) {
+            #splash-screen {
+                display: flex;
+            }
+        }
+        /* Fallback for iOS Standalone Mode */
+        @media all and (display-mode: fullscreen) {
+            #splash-screen {
+                display: flex;
+            }
+        }
+        
+        .splash-logo-box { position: relative; margin-bottom: 20px; }
+        .splash-icon { font-size: 4rem; color: var(--accent); animation: spin-pulse 2s infinite ease-in-out; }
+        .splash-text { font-size: 2rem; font-weight: 800; letter-spacing: 1px; opacity: 0; animation: fadeUp 1s ease-out forwards; animation-delay: 0.5s; }
+        .splash-tagline { font-size: 0.9rem; opacity: 0; color: #ccc; animation: fadeUp 1s ease-out forwards; animation-delay: 1s; }
+
+        @keyframes spin-pulse {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+            100% { transform: scale(1) rotate(360deg); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hide-splash { opacity: 0; visibility: hidden; }
+        /* --- END SPLASH SCREEN --- */
+
         /* iOS Input Fixes */
         input[type="date"], input[type="time"] {
             -webkit-appearance: none;
@@ -64,18 +110,18 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         
-        .logo-container { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .logo-icon-img { font-size: 2rem; color: var(--accent); }
+        .logo-container { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .logo-icon-img { font-size: 1.8rem; color: var(--accent); }
         .logo-text-group { display: flex; flex-direction: column; line-height: 1; }
-        .logo-main-text { font-weight: 700; font-size: 1.2rem; color: white; letter-spacing: 0.5px; }
-        .logo-sub-text { font-weight: 400; font-size: 0.85rem; color: var(--accent); align-self: flex-end; }
+        .logo-main-text { font-weight: 800; font-size: 1.1rem; color: white; letter-spacing: 0.5px; text-transform: uppercase; }
+        .logo-sub-text { font-weight: 400; font-size: 0.7rem; color: #ddd; letter-spacing: 1px; }
 
         .nav-actions { display: flex; gap: 8px; align-items: center; justify-content: flex-end; }
         
         .lang-btn {
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
             color: white; padding: 6px 10px; border-radius: 15px; font-size: 0.75rem;
-            cursor: pointer; transition: 0.3s; white-space: nowrap;
+            cursor: pointer; transition: 0.3s; white-space: nowrap; backdrop-filter: blur(5px);
         }
         .lang-btn:hover { background: var(--accent); color: var(--dark); border-color: var(--accent); }
 
@@ -324,6 +370,14 @@
 </head>
 <body id="top">
 
+    <div id="splash-screen">
+        <div class="splash-logo-box">
+            <i class="fas fa-recycle splash-icon"></i>
+        </div>
+        <div class="splash-text">SmartKabadi</div>
+        <div class="splash-tagline">Recycle for a Better Future</div>
+    </div>
+
     <div id="addressModal" class="modal-overlay">
         <div class="modal-box">
             <h3><span id="modalTitle">📍 Pickup Details</span> <span class="close-modal-btn" onclick="closeAllModals()">&times;</span></h3>
@@ -373,7 +427,7 @@
             <i class="fas fa-recycle logo-icon-img"></i>
             <div class="logo-text-group">
                 <span class="logo-main-text">SmartKabadi</span>
-                <span class="logo-sub-text">Service</span>
+                <span class="logo-sub-text">RECYCLE HUB</span>
             </div>
         </div>
         
@@ -681,7 +735,7 @@
             }
         }
 
-        // --- 5. MODAL LOGIC (RESTORED RICH CONTENT) ---
+        // --- 5. MODAL LOGIC ---
         function openModalAndPushState(modalId) {
             const modal = document.getElementById(modalId);
             modal.style.display = 'flex';
@@ -726,7 +780,7 @@
             openModalAndPushState('addressModal');
         }
 
-        // --- 6. SAVE & SEND LOGIC (WHATSAPP EXACT FORMAT) ---
+        // --- 6. SAVE & SEND LOGIC ---
         async function sendFinalWhatsApp() {
             const btn = document.getElementById('confirmBtn');
             const originalText = btn.innerText;
@@ -779,7 +833,7 @@
                     throw new Error("Database not connected");
                 }
 
-                // 6. WhatsApp (EXACT REQUESTED FORMAT)
+                // 6. WhatsApp
                 let msg = `✅ New Pickup Request\n\n`;
                 msg += `Name: ${name}\n`;
                 msg += `Mobile: ${mobile}\n`;
@@ -884,42 +938,42 @@
             policy: {
                 en: {
                     title: "Company Policy",
-                    body: `<details><summary>1. Pricing & Rate Policy</summary><p><strong>Market Fluctuation:</strong> Rates are estimates. Final price depends on live market.<br><strong>Right to Change:</strong> Prices can change without notice.</p></details>
-                           <details><summary>2. Weighing & Measurement</summary><p><strong>Transparency:</strong> Digital Scales used.<br><strong>Verification:</strong> Check weight before payment.<br><strong>Dispute:</strong> Settle disputes immediately on spot.</p></details>
-                           <details><summary>3. Anti-Theft (Strict)</summary><p><strong>Ownership:</strong> You must own the items.<br><strong>Prohibited:</strong> No Govt property, stolen vehicles, sealed cylinders.<br><strong>KYC:</strong> ID may be asked for bulk scrap.</p></details>
-                           <details><summary>4. Pickup Charges</summary><p><strong>Free Pickup:</strong> For orders above ₹300.<br><strong>Fee:</strong> ₹50 fee for orders below ₹300.<br><strong>Delays:</strong> Traffic may cause slight delays.</p></details>
-                           <details><summary>5. Payment Terms</summary><p><strong>Instant:</strong> Payment upon weighing.<br><strong>Modes:</strong> Cash & UPI (PhonePe, GPay, Paytm).<br><strong>No Credit:</strong> No pay later services.</p></details>
-                           <details><summary>6. Safety & Liability</summary><p>Staff is trained, but we are not liable for minor damages (scratches) during movement.</p></details>`
+                    body: `<details><summary>1. Pricing & Rate Policy</summary><p><strong>Market Fluctuation:</strong> Rates are indicative estimates. Final rate based on Live Mandi Rates at pickup.<br><strong>Change Right:</strong> SmartKabadi can change prices without notice.</p></details>
+                           <details><summary>2. Weighing & Measurement</summary><p><strong>Transparency:</strong> Calibrated Digital Weighing Scales used.<br><strong>Verification:</strong> Check weight on screen before payment.<br><strong>Dispute:</strong> Settle disputes immediately on doorstep. No claims after team leaves.</p></details>
+                           <details><summary>3. Anti-Theft & Legal (Strict)</summary><p><strong>Ownership:</strong> You confirm legal ownership of items.<br><strong>Prohibited:</strong> No Govt property (rail tracks, manholes), stolen vehicles, sealed cylinders, weapons.<br><strong>KYC:</strong> ID (Aadhar/Voter) may be asked for bulk/suspicious scrap.</p></details>
+                           <details><summary>4. Pickup & Service Charges</summary><p><strong>Free Pickup:</strong> For orders above ₹300.<br><strong>Visiting Fee:</strong> ₹50 fee deducted for orders below ₹300.<br><strong>Scheduling:</strong> Delays possible due to traffic.</p></details>
+                           <details><summary>5. Payment Terms</summary><p><strong>Instant:</strong> Payment upon weighing.<br><strong>Modes:</strong> Cash & UPI (PhonePe, GPay, Paytm).<br><strong>No Credit:</strong> No "pay later" services.</p></details>
+                           <details><summary>6. Safety & Liability</summary><p>Staff is trained, but SmartKabadi is not liable for minor incidental damages (scratches) during movement. Keep path clear.</p></details>`
                 },
                 hi: {
                     title: "कंपनी नीति (Policy)",
-                    body: `<details><summary>1. मूल्य और रेट नीति</summary><p><strong>बाजार भाव:</strong> वेबसाइट के रेट अनुमानित हैं। फाइनल रेट मौके पर तय होगा।<br><strong>बदलाव:</strong> कीमतें बिना सूचना के बदल सकती हैं।</p></details>
-                           <details><summary>2. वजन और माप</summary><p><strong>पारदर्शिता:</strong> डिजिटल तराजू का उपयोग।<br><strong>जांच:</strong> भुगतान से पहले वजन चेक करें।<br><strong>विवाद:</strong> विवाद का निपटारा तुरंत मौके पर करें।</p></details>
-                           <details><summary>3. चोरी-विरोधी (सख्त)</summary><p><strong>मालिकाना हक:</strong> सामान आपका होना चाहिए।<br><strong>वर्जित:</strong> सरकारी संपत्ति, चोरी की गाड़ियां, सिलेंडर नहीं लेंगे।<br><strong>KYC:</strong> ज्यादा माल पर ID मांग सकते हैं।</p></details>
-                           <details><summary>4. पिकअप शुल्क</summary><p><strong>फ्री पिकअप:</strong> ₹300 से ऊपर के ऑर्डर पर।<br><strong>शुल्क:</strong> ₹300 से कम पर ₹50 चार्ज।</p></details>
+                    body: `<details><summary>1. मूल्य और रेट नीति</summary><p><strong>बाजार भाव:</strong> वेबसाइट रेट केवल अनुमान हैं। फाइनल रेट पिकअप के समय मंडी भाव पर तय होगा।<br><strong>बदलाव:</strong> कीमतें बिना सूचना के बदल सकती हैं।</p></details>
+                           <details><summary>2. वजन और माप</summary><p><strong>पारदर्शिता:</strong> डिजिटल तराजू का उपयोग।<br><strong>जांच:</strong> पेमेंट से पहले मशीन पर वजन चेक करें।<br><strong>विवाद:</strong> वजन/क्वालिटी का फैसला तुरंत मौके पर करें। टीम जाने के बाद कोई सुनवाई नहीं होगी।</p></details>
+                           <details><summary>3. चोरी-विरोधी और कानून (सख्त)</summary><p><strong>मालिकाना हक:</strong> आप पुष्टि करते हैं कि सामान आपका है।<br><strong>वर्जित:</strong> सरकारी संपत्ति (पटरी, मैनहोल), चोरी की गाड़ियां, सील सिलेंडर, हथियार नहीं लेंगे।<br><strong>KYC:</strong> ज्यादा माल पर ID मांग सकते हैं।</p></details>
+                           <details><summary>4. पिकअप और सर्विस चार्ज</summary><p><strong>फ्री पिकअप:</strong> ₹300 से ज्यादा के ऑर्डर पर।<br><strong>चार्ज:</strong> ₹300 से कम पर ₹50 विजिटिंग फीस कटेगी।<br><strong>समय:</strong> ट्रैफिक के कारण देरी हो सकती है।</p></details>
                            <details><summary>5. भुगतान शर्तें</summary><p><strong>तुरंत:</strong> वजन होते ही भुगतान।<br><strong>तरीके:</strong> नकद और UPI (PhonePe, GPay)।<br><strong>उधारी:</strong> कोई उधारी सुविधा नहीं।</p></details>
-                           <details><summary>6. सुरक्षा</summary><p>सामान उठाते समय छोटी-मोटी खरोंच के लिए कंपनी जिम्मेदार नहीं होगी।</p></details>`
+                           <details><summary>6. सुरक्षा और जिम्मेदारी</summary><p>सामान उठाते समय दीवार/फर्श पर छोटी खरोंच के लिए कंपनी जिम्मेदार नहीं होगी। रास्ता साफ रखें।</p></details>`
                 }
             },
             faq: {
                 en: {
                     title: "FAQ",
-                    body: `<details><summary>Q1: How do I book a pickup?</summary><p>Use calculator -> Fill Address -> Click "Confirm".</p></details>
-                           <details><summary>Q2: Is there a minimum limit?</summary><p>Yes. ₹300 for Free Pickup. Below that, ₹50 fee applies.</p></details>
-                           <details><summary>Q3: Are rates fixed?</summary><p>No, they are estimates based on daily market trends.</p></details>
-                           <details><summary>Q4: Do you buy clothes/wood?</summary><p>No old clothes, shoes, glass, or wood.</p></details>
-                           <details><summary>Q5: How do I get paid?</summary><p>Instant Cash or UPI (PhonePe, Paytm, GPay).</p></details>
-                           <details><summary>Q6: Is weighing accurate?</summary><p>Yes, we use Digital Scales. You can check the screen.</p></details>
-                           <details><summary>Q7: Can I schedule a time?</summary><p>Yes, select time while booking. Allow 30-45 mins buffer.</p></details>`
+                    body: `<details><summary>Q1: How do I book a pickup?</summary><p>Use calculator -> Select Items -> Fill Address -> Click "Confirm via WhatsApp". Team will call to confirm.</p></details>
+                           <details><summary>Q2: Is there a minimum limit?</summary><p>Yes. <strong>Free Pickup</strong> for ₹300+ value. Below ₹300, a ₹50 visiting fee applies.</p></details>
+                           <details><summary>Q3: Are rates fixed?</summary><p>No, rates are daily estimates. Final rate depends on live market at pickup time.</p></details>
+                           <details><summary>Q4: Do you buy clothes/wood?</summary><p>No. We DO NOT buy old clothes, shoes, glass bottles, or wood furniture. Only recyclable scrap.</p></details>
+                           <details><summary>Q5: How do I get paid?</summary><p>Instant Cash or UPI (PhonePe, Paytm, GPay) directly to bank account.</p></details>
+                           <details><summary>Q6: Is weighing accurate?</summary><p>Yes, we use high-precision Digital Scales. Please check the weight on screen yourself.</p></details>
+                           <details><summary>Q7: Can I schedule a time?</summary><p>Yes, select date/time while booking. Allow 30-45 mins window for traffic.</p></details>`
                 },
                 hi: {
                     title: "सवाल / जवाब (FAQ)",
-                    body: `<details><summary>Q1: बुकिंग कैसे करें?</summary><p>कैलकुलेटर में आइटम डालें -> पता भरें -> "Confirm" दबाएं।</p></details>
-                           <details><summary>Q2: क्या कम से कम लिमिट है?</summary><p>हाँ। फ्री पिकअप के लिए ₹300। उससे कम पर ₹50 चार्ज।</p></details>
-                           <details><summary>Q3: क्या रेट फिक्स हैं?</summary><p>नहीं, यह अनुमानित हैं। फाइनल रेट मंडी भाव पर निर्भर करता है।</p></details>
-                           <details><summary>Q4: क्या कपड़े/लकड़ी लेते हैं?</summary><p>नहीं। पुराने कपड़े, जूते, कांच या लकड़ी नहीं लेते।</p></details>
-                           <details><summary>Q5: पैसे कैसे मिलेंगे?</summary><p>तुरंत नकद या UPI (PhonePe, Paytm) से।</p></details>
-                           <details><summary>Q6: क्या वजन सही होता है?</summary><p>हाँ, हम डिजिटल तराजू उपयोग करते हैं। आप खुद चेक करें।</p></details>
+                    body: `<details><summary>Q1: पिकअप कैसे बुक करें?</summary><p>कैलकुलेटर यूज करें -> आइटम चुनें -> पता भरें -> "WhatsApp" बटन दबाएं। टीम कॉल करेगी।</p></details>
+                           <details><summary>Q2: क्या कम से कम लिमिट है?</summary><p>हाँ। <strong>फ्री पिकअप</strong> ₹300+ के माल पर। ₹300 से कम होने पर ₹50 चार्ज लगेगा।</p></details>
+                           <details><summary>Q3: क्या रेट फिक्स हैं?</summary><p>नहीं, यह अनुमानित हैं। फाइनल रेट पिकअप के समय मंडी भाव के हिसाब से तय होगा।</p></details>
+                           <details><summary>Q4: क्या कपड़े/लकड़ी लेते हैं?</summary><p>नहीं। हम पुराने कपड़े, जूते, कांच की बोतलें या लकड़ी का फर्नीचर नहीं खरीदते।</p></details>
+                           <details><summary>Q5: पैसे कैसे मिलेंगे?</summary><p>तुरंत नकद या UPI (PhonePe, Paytm, Google Pay) से सीधे बैंक में।</p></details>
+                           <details><summary>Q6: क्या वजन सही होता है?</summary><p>हाँ, हम सटीक डिजिटल तराजू लाते हैं। आप खुद स्क्रीन पर वजन चेक करें।</p></details>
                            <details><summary>Q7: क्या समय तय कर सकते हैं?</summary><p>हाँ, बुकिंग के समय चुनें। ट्रैफिक के कारण 30-45 मिनट आगे-पीछे हो सकता है।</p></details>`
                 }
             }
@@ -979,32 +1033,21 @@
             openModalAndPushState('infoModal');
         }
 
-        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-
-        window.onload = () => { loadLiveRates(); renderCart(); };
-        // --- PWA REGISTRATION CODE ---
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function() {
-        navigator.serviceWorker.register("sw.js")
-            .then(res => console.log("✅ App Ready to Install"))
-            .catch(err => console.log("❌ App Failed", err));
-    });
-}
-// --- APP INSTALL TRACKER ---
-window.addEventListener('appinstalled', (evt) => {
-    console.log('✅ App Installed by User');
-    
-    // Firebase mein count save karein
-    if(db) {
-        db.collection('app_downloads').add({
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            userAgent: navigator.userAgent, // Device ki details
-            status: 'Installed'
-        }).then(() => {
-            console.log("Install Counted in Database");
+        // --- SPLASH SCREEN REMOVAL ---
+        window.addEventListener('load', () => {
+            loadLiveRates();
+            renderCart();
+            // PWA Tracker
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("sw.js").then(() => console.log("SW Registered"));
+            }
+            // Remove Splash Screen after 2.5 seconds
+            setTimeout(() => {
+                document.getElementById('splash-screen').classList.add('hide-splash');
+            }, 2500);
         });
-    }
-});
+
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
     </script>
 </body>
 </html>
